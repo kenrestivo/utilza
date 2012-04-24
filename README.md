@@ -4,7 +4,9 @@ Random web-related Clojure utilities I use in a couple projects.
 
 ## Usage
 
-It's not even close to done yet.
+Oh, it's just cloud storage for random things I use.
+
+It's not even close to useful for anyone yet.
 
 ## License
 
