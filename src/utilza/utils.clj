@@ -21,6 +21,12 @@
 
 
 
+(defn map-vals
+  "Apply a function to all the values"
+  [f m]
+  (zipmap (keys m) (map f (vals m))))
+
+
 ;; TODO: make this into a macro, so server/start doesn't have to be pulled in
 (defn manual []
   (let [mode :dev
