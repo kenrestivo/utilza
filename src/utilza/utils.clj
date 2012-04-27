@@ -22,7 +22,7 @@
 
 
 (defn map-vals
-  "Apply a function to all the values"
+  "Apply a function to all the values (thanks technomancy)"
   [f m]
   (zipmap (keys m) (map f (vals m))))
 
@@ -34,3 +34,13 @@
     (server/start port
                   {:mode mode
                    :ns (-> (.split #"\." (.toString *ns*)) first symbol )})))
+
+
+;;; general couch stuff
+
+(defn save-or-update
+  "Silently overwrite a clutch doc if it already present"
+  [db m]
+  (if-let [found (clutch/get-document db (:_id m))]
+    (clutch/update-document db found m)
+    (clutch/put-document db m)))
