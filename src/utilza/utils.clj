@@ -44,3 +44,13 @@
   (if-let [found (clutch/get-document db (:_id m))]
     (clutch/update-document db found m)
     (clutch/put-document db m)))
+
+
+;;; file sysstem stuff
+
+(defn intermediate-paths
+  "Takes file-path, a complete path to the file, including the file iteself!
+    Strips off the filename, returns a list of intermediate paths."
+  [file-path]
+  (let [paths (pop (split file-path  #"\/"))]
+    (map #(clojure.string/join "/" %) (rest (reductions conj [] paths)))))
