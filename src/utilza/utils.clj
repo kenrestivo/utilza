@@ -50,7 +50,9 @@
 
 (defn intermediate-paths
   "Takes file-path, a complete path to the file, including the file iteself!
-    Strips off the filename, returns a list of intermediate paths."
+    Strips off the filename, returns a list of intermediate paths.
+    Thanks to emezeke for the reductions device."
   [file-path]
   (let [paths (pop (split file-path  #"\/"))]
     (map #(clojure.string/join "/" %) (rest (reductions conj [] paths)))))
+
