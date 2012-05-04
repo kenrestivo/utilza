@@ -56,3 +56,9 @@
   (let [paths (pop (split file-path  #"\/"))]
     (map #(clojure.string/join "/" %) (rest (reductions conj [] paths)))))
 
+
+(defn hashify [thing]
+  (let [md (java.security.MessageDigest/getInstance "SHA-1")]
+    (apply str
+           (map #(format "%02x" (bit-and 0x00ff %))
+                (->> thing  .getBytes  (.digest md ))))))
