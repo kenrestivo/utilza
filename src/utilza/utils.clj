@@ -79,11 +79,19 @@
 
 (defn get-parents
   "Get all the parents for a particular node.
-   Assumes a vector-zip"
+   Assumes a vector-zip, in the format
+    [parent [[child [subchild...]] [anotherchild]]]"
   [n]
-  (map (comp z/node z/node)
-       (loop [loc (-> n z/up z/up)
+  (map (comp z/node)
+       (loop [loc (-> n z/up z/up z/left)
               res []]
          (if loc
-           (recur (-> loc z/up) (conj res loc))
+           (recur (-> loc z/up z/up z/left) (conj res loc))
            res))))
+
+
+(defn get-children
+   "Assumes a vector-zip, in the format
+    [parent [[child [subchild...]] [anotherchild]]]"
+  [loc]
+  (map first  (-> loc z/right z/children)))
