@@ -62,3 +62,16 @@
     (apply str
            (map #(format "%02x" (bit-and 0x00ff %))
                 (->> thing  .getBytes  (.digest md ))))))
+
+
+
+(defn find-in-zipper
+  "Find a node in a zipper, if predicate returns true.
+   Assumes that valid nodes are maps."
+  [f loc]
+  (if (z/end? loc)
+    nil
+    (if (and (map? (z/node loc))
+             (pred loc))
+      loc
+      (recur pred (z/next loc)))))
