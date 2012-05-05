@@ -67,7 +67,7 @@
 
 (defn find-in-zipper
   "Find a node in a zipper, if predicate returns true.
-   Assumes that valid nodes are maps."
+   Assumes that valid nodes are maps, and the structure is a vector-zip."
   [f loc]
   (if (z/end? loc)
     nil
@@ -75,3 +75,15 @@
              (pred loc))
       loc
       (recur pred (z/next loc)))))
+
+
+(defn get-parents
+  "Get all the parents for a particular node.
+   Assumes a vector-zip"
+  [n]
+  (map (comp z/node z/node)
+       (loop [loc (-> n z/up z/up)
+              res []]
+         (if loc
+           (recur (-> loc z/up) (conj res loc))
+           res))))
