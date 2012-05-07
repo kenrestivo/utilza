@@ -35,6 +35,8 @@
                   {:mode mode
                    :ns (-> (.split #"\." (.toString *ns*)) first symbol )})))
 
+(comment
+  (defonce srv (manual)))
 
 ;;; general couch stuff
 
@@ -94,4 +96,21 @@
    "Assumes a vector-zip, in the format
     [parent [[child [subchild...]] [anotherchild]]]"
   [loc]
-  (map first  (-> loc z/right z/children)))
+  (map z/node  (-> loc z/right z/children)))
+
+
+;;; missing functions from noir
+
+(defn valid-file?
+  "Valid file supplied, for noir validation"
+  [m]
+  (and (> (:size m) 0)
+       (:filename m)))
+
+
+(defn non-zero?
+  "Valid number > 0, for noir validation"
+  [v]
+  (and (not (empty? v))
+   (> (Long/parseLong v) 0)))
+
