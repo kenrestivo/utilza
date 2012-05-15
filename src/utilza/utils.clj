@@ -118,7 +118,7 @@
 
 
 (defn zip-walk
-  "Walks a zipper tree and transforms every node by runninig f on them."
+  "Walks a zipper tree and transforms each node by running f on it."
   [f zcat]
   (loop [loc zcat]
     (if (z/end? loc)
@@ -137,6 +137,7 @@
     (fn [loc]
       (cond  (not (z/branch? loc))
              (z/insert-left loc (if (-> loc z/up z/rights) :li :li.last))
+             ;; TODO: replace the (and) with the -?> macro from incubator
              (and (-> loc z/down z/down) (-> loc z/down z/down z/branch? not))
              (z/insert-left (z/down loc) :ul)
              :else loc))
