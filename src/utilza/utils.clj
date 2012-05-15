@@ -136,8 +136,7 @@
    (zip-walk 
     (fn [loc]
       (cond  (not (z/branch? loc))
-             (z/insert-left (z/replace loc (:name (z/node loc)))
-                            (if (-> loc z/up z/rights) :li :li.last))
+             (z/insert-left loc (if (-> loc z/up z/rights) :li :li.last))
              (and (-> loc z/down z/down) (-> loc z/down z/down z/branch? not))
              (z/insert-left (z/down loc) :ul)
              :else loc))
