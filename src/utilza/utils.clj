@@ -1,4 +1,5 @@
-(ns utilza.utils)
+(ns utilza.utils
+  (:require [clojure.zip :as z]))
 
 
 (defn anchorify
@@ -114,3 +115,30 @@
   (and (not (empty? v))
    (> (Long/parseLong v) 0)))
 
+
+
+(defn zip-walk
+  "Walks a zipper tree and transforms every node by runninig f on them."
+  [f zcat]
+  (loop [loc zcat]
+    (if (z/end? loc)
+      (z/root loc)
+      (recur
+       (z/next
+        (f loc))))))
+
+
+(defn cat-tree
+  "Turns a zipper into a ul/li tree for hiccup html.
+   Format it like so: http://odyniec.net/articles/turning-lists-into-trees/"
+  [zcat]
+  [:ul.tree
+   (zip-walk 
+    (fn [loc]
+      (cond  (not (z/branch? loc))
+             (z/insert-left (z/replace loc (:name (z/node loc)))
+                            (if (-> loc z/up z/rights) :li :li.last))
+             (and (-> loc z/down z/down) (-> loc z/down z/down z/branch? not))
+             (z/insert-left (z/down loc) :ul)
+             :else loc))
+    zcat)])
