@@ -1,4 +1,5 @@
 (ns utilza.utils
+  (:import java.util.Calendar java.text.SimpleDateFormat java.text.ParsePosition)
   (:require [clojure.zip :as z]))
 
 
@@ -12,10 +13,10 @@
   "Make nice for jquery tabs"
   [m]
   (html [:ul
-       (for [x m]
-         [:li
-          [:a {:href (or (:href x) (->> x  :title anchorify (str "#")))}
-           (:title x)]])]
+         (for [x m]
+           [:li
+            [:a {:href (or (:href x) (->> x  :title anchorify (str "#")))}
+             (:title x)]])]
         (for [x m]
           [:div {:id (-> x :title anchorify )} (:body x)])))
 
@@ -94,7 +95,7 @@
 
 
 (defn get-children
-   "Assumes a vector-zip, in the format
+  "Assumes a vector-zip, in the format
     [parent [[child [subchild...]] [anotherchild]]]"
   [loc]
   (map z/node  (-> loc z/right z/children)))
@@ -113,7 +114,7 @@
   "Valid number > 0, for noir validation"
   [v]
   (and (not (empty? v))
-   (> (Long/parseLong v) 0)))
+       (> (Long/parseLong v) 0)))
 
 
 
@@ -142,3 +143,14 @@
              (z/insert-left (z/down loc) :ul)
              :else loc))
     zcat)])
+
+
+(defn iso8601-to-rfc822-date
+  "For converting java format dates to javscript format dates"
+  [isodate]
+  (-> (SimpleDateFormat. "EEE, d MMM yyyy HH:mm:ss Z")
+      (.format
+       (-> (SimpleDateFormat. "yyyy-MM-dd'T'HH:mm:ssZ")
+           (.parse isodate
+                   (java.text.ParsePosition. 0))))))
+
