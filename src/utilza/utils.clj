@@ -1,5 +1,6 @@
 (ns utilza.utils
   (:import java.util.Calendar java.text.SimpleDateFormat java.text.ParsePosition)
+  (:use [clojure.core.incubator :only [-?>]])
   (:require [clojure.zip :as z]))
 
 
@@ -139,7 +140,7 @@
       (cond  (not (z/branch? loc))
              (z/insert-left loc (if (-> loc z/up z/rights) :li :li.last))
              ;; TODO: replace the (and) with the -?> macro from incubator
-             (and (-> loc z/down z/down) (-> loc z/down z/down z/branch? not))
+             (-?> loc z/down z/down z/branch? not)
              (z/insert-left (z/down loc) :ul)
              :else loc))
     zcat)])
