@@ -165,6 +165,8 @@
   (pprint (merge-with vector @noir.core/noir-routes  @noir.core/route-funcs))
   (println "== Post-Routes ==")
   (pprint @noir.core/post-routes)
+  (println "== Compojure-Routes ==")
+  (pprint @noir.core/compojure-routes)
   (println "== Middleware ==")
   (pprint @noir.server.handler/middleware)
   (println "== Wrappers ==")
@@ -174,8 +176,8 @@
 
 (defn mock
   "A very simple from-the-repl way to test/debug webpages"
-  [url & params]
-  (let [res (noir.util.test/with-noir (noir.util.test/send-request url))]
+  [ring]
+  (let [res (noir.util.test/with-noir (noir.util.test/send-request-map ring))]
     (spit "/tmp/log.html" (:body res))
     (pprint ((juxt :status :headers) res))))
 
