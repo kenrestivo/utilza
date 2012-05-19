@@ -172,4 +172,10 @@
 
 
 
+(defn mock
+  "A very simple from-the-repl way to test/debug webpages"
+  [url & params]
+  (let [res (noir.util.test/with-noir (noir.util.test/send-request url))]
+    (spit "/tmp/log.html" (:body res))
+    (pprint ((juxt :status :headers) res))))
 
