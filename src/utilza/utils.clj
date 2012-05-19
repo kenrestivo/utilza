@@ -155,3 +155,21 @@
            (.parse isodate
                    (java.text.ParsePosition. 0))))))
 
+
+(defn noir-state
+  "Print the state of the noir server at the moment"
+  []
+  (println "== Pre-routes ==")
+  (pprint @noir.core/pre-routes)
+  (println "== Routes  and Funcs ==")
+  (pprint (merge-with vector @noir.core/noir-routes  @noir.core/route-funcs))
+  (println "== Post-Routes ==")
+  (pprint @noir.core/post-routes)
+  (println "== Middleware ==")
+  (pprint @noir.server.handler/middleware)
+  (println "== Wrappers ==")
+  (pprint @noir.server.handler/wrappers))
+
+
+
+
