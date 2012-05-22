@@ -156,13 +156,18 @@
                    (java.text.ParsePosition. 0))))))
 
 
+(require '[noir.core])
+(require '[noir.util.test])
+
 (defn noir-state
-  "Print the state of the noir server at the moment"
-  []
+  "Print the state of the noir server at the moment.
+   If summary? arg is provided and truthy, print a summary instead."
+  [& summary?]
+  (let [print-func (if summary? (comp pprint sort keys) pprint)]
   (println "== Pre-routes ==")
-  (pprint @noir.core/pre-routes)
+  (print-func @noir.core/pre-routes)
   (println "== Routes  and Funcs ==")
-  (pprint (merge-with vector @noir.core/noir-routes  @noir.core/route-funcs))
+  (print-func (merge-with vector @noir.core/noir-routes  @noir.core/route-funcs))
   (println "== Post-Routes ==")
   (pprint @noir.core/post-routes)
   (println "== Compojure-Routes ==")
@@ -170,7 +175,7 @@
   (println "== Middleware ==")
   (pprint @noir.server.handler/middleware)
   (println "== Wrappers ==")
-  (pprint @noir.server.handler/wrappers))
+  (pprint @noir.server.handler/wrappers)))
 
 
 
@@ -180,4 +185,5 @@
   (let [res (noir.util.test/with-noir (noir.util.test/send-request-map ring))]
     (spit "/tmp/log.html" (:body res))
     (pprint ((juxt :status :headers) res))))
+
 
