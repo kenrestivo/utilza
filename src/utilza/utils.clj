@@ -161,9 +161,9 @@
 
 (defn noir-state
   "Print the state of the noir server at the moment.
-   If summary? arg is provided and truthy, print a summary instead."
-  [& summary?]
-  (let [print-func (if summary? (comp pprint sort keys) pprint)]
+   If details? arg is provided and truthy, show noir route/funcs too."
+  [& details?]
+  (let [print-func (if details? pprint (comp pprint sort keys))]
   (println "== Pre-routes ==")
   (print-func @noir.core/pre-routes)
   (println "== Routes  and Funcs ==")
@@ -185,5 +185,14 @@
   (let [res (noir.util.test/with-noir (noir.util.test/send-request-map ring))]
     (spit "/tmp/log.html" (:body res))
     (pprint ((juxt :status :headers) res))))
+ 
 
 
+(defn spew-req
+  "str with pprint of the ring request.
+  Wrepped in pre so it is  readable both in browser
+   and in shell with curl, etc. Useful for debugging."
+  []
+  [:pre (-> (noir.request/ring-request)
+            clojure.pprint/pprint
+            with-out-str)])
