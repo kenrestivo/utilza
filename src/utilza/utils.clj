@@ -222,3 +222,26 @@
      [:tr
       (for [i r]
         [:td i])])])
+
+
+
+(defn reloader
+  "Pass it your noir-project-name.server/-main function.
+   Save the result, and call that when you need to regenerate all handlers."
+  ([mn]
+     (reloader mn nil))
+  ([mn srv]
+     (when srv (.stop srv))
+     (let [srv (mn)]
+       (fn []
+         (reloader mn srv)))))
+       
+
+(comment ;; example
+  (def rel (reloader -main))
+  (def rel (rel))
+  ;; do some work, need to reload middleware
+  (def rel (rel))
+  ;; do soem more work, damn, need to update middleware again
+  (def rel (rel))
+  ;; ... etc)
