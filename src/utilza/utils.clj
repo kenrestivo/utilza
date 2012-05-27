@@ -160,22 +160,36 @@
 (require '[noir.util.test])
 
 (defn noir-state
-  "Print the state of the noir server at the moment.
-   If details? arg is provided and truthy, show noir route/funcs too."
+  "Print the state of the noir server's routes/middleware/wrappers.
+   If optional details? arg is truthy, show noir-routes, route-funcs,
+   and status pages too."
   [& details?]
-  (let [print-func (if details? pprint (comp pprint sort keys))]
-  (println "== Pre-routes ==")
-  (print-func @noir.core/pre-routes)
-  (println "== Routes  and Funcs ==")
-  (print-func (merge-with vector @noir.core/noir-routes  @noir.core/route-funcs))
-  (println "== Post-Routes ==")
-  (pprint @noir.core/post-routes)
-  (println "== Compojure-Routes ==")
-  (pprint @noir.core/compojure-routes)
-  (println "== Middleware ==")
-  (pprint @noir.server.handler/middleware)
-  (println "== Wrappers ==")
-  (pprint @noir.server.handler/wrappers)))
+  (let [print-func (if details? pprint (comp println pprint sort keys))]
+    
+    (println "== Pre-Routes ==")
+    (print-func @noir.core/pre-routes)
+  
+    (println "== Routes and Funcs ==")
+    (print-func (merge-with vector @noir.core/noir-routes  @noir.core/route-funcs))
+  
+    (println "== Post-Routes ==")
+    (pprint @noir.core/post-routes)
+  
+    (println "== Compojure-Routes ==")
+    (pprint @noir.core/compojure-routes)
+  
+    (println "== Middleware ==")
+    (pprint @noir.server.handler/middleware)
+  
+    (println "== Wrappers ==")
+    (pprint @noir.server.handler/wrappers)
+
+    (println "== Memory Store ==")
+    (pprint @noir.session/mem)
+  
+    (when details?
+      (do (println "== Status Pages ==")
+          (pprint @noir.statuses/status-pages)))))
 
 
 
@@ -196,3 +210,15 @@
   [:pre (-> (noir.request/ring-request)
             clojure.pprint/pprint
             with-out-str)])
+
+
+
+
+(defn tablify
+  "Make html table from vector of vectors"
+  [vv]
+  [:table  
+   (for [r vv]
+     [:tr
+      (for [i r]
+        [:td i])])])
