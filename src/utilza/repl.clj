@@ -8,7 +8,8 @@
 
 
 (defn jpublics 
-  "getting only non-private members of a java class. PLEASE don't make me read javadooc!"
+  "getting only non-private members of a java class.
+  PLEASE don't make me read javadooc!"
   [c]
   ;; optimization by amalloy
   (->
