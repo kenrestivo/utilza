@@ -24,9 +24,10 @@
 
 
 
-(defmacro spewsave [f & args]
-  "Saves the body of the request to a file somewhere, returns the headers"
+(defmacro spewsave [& body]
+  "Give it the function and args, i.e. client/get url, but without parens.
+   Saves the :body of the request to /tmp/result.html, and returns the headers."
   `(binding [clj-http.core/*cookie-store* cookies]
-     (let [r# (~f ~@args)]
+     (let [r# (~@body)]
        (spit "/tmp/result.html" (:body r#))
        (dissoc r# :body))))
