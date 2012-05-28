@@ -1,6 +1,6 @@
 ;;; stuff that will be in noir but hasn't been released/approved yet
 
-(ns utilza.noirutils.future
+(ns utilza.noir.future
   (:require [noir.core]
             [noir.util.test]
             [noir.server :as server]

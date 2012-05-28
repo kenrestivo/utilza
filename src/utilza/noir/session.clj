@@ -4,7 +4,7 @@
 ;;; but you don't want to make users log back in whenever you push to Heroku,
 ;;; which restarts the JVM and loses its memory store.
 
-(ns utilza.noirutils.session
+(ns utilza.noir.session
   (:require [com.ashafa.clutch :as clutch]
             [noir.session]))
 

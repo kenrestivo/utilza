@@ -1,4 +1,4 @@
-(ns utilza.noirutils.misc
+(ns utilza.noir.misc
   (:require [noir.core]
             [noir.util.test]
             [noir.server :as server]
