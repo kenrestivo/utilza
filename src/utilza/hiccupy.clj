@@ -1,6 +1,7 @@
 ;;; utilities related to hiccup and html formattingx
 
-(ns utilza.hiccupy (:require [clojure.string :as string]))
+(ns utilza.hiccupy
+  (:require [clojure.string :as string]))
 
 
 (defn anchorify

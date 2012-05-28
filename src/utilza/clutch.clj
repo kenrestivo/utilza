@@ -1,6 +1,6 @@
 ;;; utilities related to couchdb/clutch
 
-(ns utilza.zip
+(ns utilza.clutch
   (:require [com.ashafa.clutch :as clutch]))
 
 

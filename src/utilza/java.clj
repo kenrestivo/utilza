@@ -1,6 +1,7 @@
 ;;; misc wrappers around commonly-used java functions
 
-(ns utilza.java (:import (java.text SimpleDateFormat)))
+(ns utilza.java
+  (:import (java.text SimpleDateFormat)))
 
 
 
