@@ -1,6 +1,9 @@
 ;;; repl-related utilities
 
-(ns utilza.repl)
+(ns utilza.repl
+  (:require [clojure.reflect]
+            [clojure.pprint]
+            [clojure.string]))
 
 
 

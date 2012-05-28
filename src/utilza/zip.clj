@@ -10,29 +10,18 @@
 
 
 
-;;; file sysstem stuff
-
-(defn intermediate-paths
-  "Takes file-path, a complete path to the file, including the file iteself!
-    Strips off the filename, returns a list of intermediate paths.
-    Thanks to emezeke for the reductions device."
-  [file-path]
-  (let [paths (pop (split file-path  #"\/"))]
-    (map #(clojure.string/join "/" %) (rest (reductions conj [] paths)))))
-
-
 
 
 (defn find-in-zipper
   "Find a node in a zipper, if predicate returns true.
    Assumes that valid nodes are maps, and the structure is a vector-zip."
-  [f loc]
+  [pred? loc]
   (if (z/end? loc)
     nil
     (if (and (map? (z/node loc))
-             (pred loc))
+             (pred? loc))
       loc
-      (recur pred (z/next loc)))))
+      (recur pred? (z/next loc)))))
 
 
 (defn get-parents

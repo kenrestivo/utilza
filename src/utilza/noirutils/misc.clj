@@ -1,19 +1,13 @@
 (ns utilza.noirutils.misc
   (:require [noir.core]
-            [noir.util.test]))
+            [noir.util.test]
+            [noir.server :as server]
+            [noir.core]
+            [noir.server.handler]
+            [noir.request]
+            [noir.util.test])
+  (:use [clojure.pprint :only [pprint]]))
 
-
-
-;; TODO: make this into a macro, so server/start doesn't have to be pulled in
-(defn manual []
-  (let [mode :dev
-        port 8081]
-    (server/start port
-                  {:mode mode
-                   :ns (-> (.split #"\." (.toString *ns*)) first symbol )})))
-
-(comment
-  (defonce srv (manual)))
 
 
 
@@ -91,6 +85,21 @@
             with-out-str)])
 
 
+
+;; the OLD way
+(defn manual []
+  (let [mode :dev
+        port 8081]
+    (server/start port
+                  {:mode mode
+                   :ns (-> (.split #"\." (.toString *ns*)) first symbol )})))
+
+(comment
+  (defonce srv (manual)))
+
+
+
+;;; the NEW way
 
 
 (defn reloader

@@ -5,7 +5,8 @@
 ;;; which restarts the JVM and loses its memory store.
 
 (ns utilza.noirutils.session
-  (:require [com.ashafa.clutch :as clutch]))
+  (:require [com.ashafa.clutch :as clutch]
+            [noir.session]))
 
 
 (def clutch-keys #{:_id :_rev})
