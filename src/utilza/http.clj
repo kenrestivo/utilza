@@ -8,17 +8,17 @@
 
 (def cookies (clj-http.cookies/cookie-store))
 
-(defmacro getcook [& args]
+(defmacro getc [& args]
   `(binding [clj-http.core/*cookie-store* cookies]
      (client/get ~@args)))
 
 
-(defmacro putcook [& args]
+(defmacro putc [& args]
   `(binding [clj-http.core/*cookie-store* cookies]
      (client/put ~@args)))
 
 
-(defmacro wrapcook [f & args]
+(defmacro wrapc [f & args]
   `(binding [clj-http.core/*cookie-store* cookies]
      (~f ~@args)))
 
