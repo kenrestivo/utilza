@@ -55,14 +55,14 @@
 
 
 (comment ;; example
-  (def db (clutch/get-database
+  (def db (com.ashafa.clutch/get-database
            (com.ashafa.clutch.utils/url "session-restore-test")))
   ;; call this from a private url handler, perhaps, before pushing or restarting
-  (with-db db (save!))
+  (com.ashafa.clutch/with-db db (save!))
   ;; restart the jvm, push a new slug to heroku, etc
   ;; put this in your server/-main method somewhere:
-  (with-db db (restore!))
+  (com.ashafa.clutch/with-db db (restore!))
   ;; in case the list grows too long, sessions don't expire, or
   ;; you just don't want to keep old sessions around anymore
-  (with-db db (wipe!)))
+  (com.ashafa.clutch/with-db db (wipe!)))
   
