@@ -68,9 +68,9 @@
   "produce the system env in a readable, more clojureish-looking  format"
   [e]
   (->> e
-      (map #(vector (keyword (key %)) (val %)))
-      flatten
-      (apply hash-map)))
+       (map #(vector (keyword (key %)) (val %)))
+       flatten
+       (apply hash-map)))
 
 
 (defn env
@@ -97,5 +97,6 @@
 
 
 ;; i use this all the time
-(defn reload-ns [ns]
-  (require ns :reload))
+(defn reload-ns [ns & all]
+  (let [flag (if all :reload-all :reload)]
+    (require ns flag)))
