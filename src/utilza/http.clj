@@ -31,3 +31,10 @@
      (let [r# (~@body)]
        (spit "/tmp/result.html" (:body r#))
        (dissoc r# :body))))
+
+
+
+(defmacro just-gimme
+  "Oh, FFS!"
+  []
+  (require '[clj-http.client :as client]))
