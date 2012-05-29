@@ -15,7 +15,8 @@
 (defn valid-file?
   "Valid file supplied, for noir validation"
   [m]
-  (and (> (:size m) 0)
+  (and (:size m)
+       (> (:size m) 0)
        (:filename m)))
 
 
