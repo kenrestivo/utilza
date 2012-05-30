@@ -38,3 +38,10 @@
   "Oh, FFS!"
   []
   (require '[clj-http.client :as client]))
+
+(comment
+  ;; does not work but i'd like it to
+  defmacro only-200
+  [& opts]
+  (let [s (:status `(spewsave ~@opts))]
+    (when (< s 400) (slurp "/tmp/result.html"))))

@@ -2,6 +2,7 @@
   (:require [noir.core]
             [noir.util.test]
             [noir.server :as server]
+            [noir.options]
             [noir.core]
             [noir.server.handler]
             [noir.request]
@@ -72,3 +73,12 @@
   (def rel (rel)))
 ;; ... etc)
 
+
+(defn get-opts
+  "Get ALL the opts, at least the ones documented, for debugging live server"
+  []
+  (apply hash-map
+         (mapcat #(vector % (noir.options/get %))
+                 [:mode :ns :jetty-options :base-url 
+                  :session-store :resource-options
+                  :session-cookie-attrs])))
