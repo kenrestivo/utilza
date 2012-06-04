@@ -13,3 +13,8 @@
     (map #(clojure.string/join "/" %) (rest (reductions conj [] paths)))))
 
 
+
+(defn static?
+  "Check if a page is static"
+  [uri]
+  (some #(boolean (re-find % uri)) [#"^/css" #"^/js" #"^/img"]))
