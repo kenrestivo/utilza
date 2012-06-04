@@ -5,6 +5,7 @@
 ;;; which restarts the JVM and loses its memory store.
 
 (ns utilza.noir.session
+  (:use cheshire.core)
   (:require [com.ashafa.clutch :as clutch]
             [noir.session]))
 
@@ -16,7 +17,9 @@
   "Use a default key if none given."
   [kk]
   (or (first kk) :session-persist))
-  
+
+
+;;; TODO: will need pr-str for sure
   
 (defn save!
   "Saves Noir memory session store to persistent clutch DB.

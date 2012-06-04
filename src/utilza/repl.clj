@@ -100,3 +100,8 @@
 (defn reload-ns [ns & all]
   (let [flag (if all :reload-all :reload)]
     (require ns flag)))
+
+
+(defn spew [h b]
+  (spit "/tmp/log.clj" (str "\n\n;;" h "\n") :append true)
+  (spit "/tmp/log.clj" (with-out-str (pprint b)) :append true))

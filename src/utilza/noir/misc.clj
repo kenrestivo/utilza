@@ -82,3 +82,15 @@
                  [:mode :ns :jetty-options :base-url 
                   :session-store :resource-options
                   :session-cookie-attrs])))
+
+
+(defn debug-keys [req]
+  (select-keys req [:request-method :uri :session]))
+
+(defn wrap-debug-session
+  [handler]
+  (fn [req]
+    (apply println "BEFORE " (concat (debug-keys req)))
+    (let [resp (handler req)]
+      (apply println "AFTER " (concat (debug-keys resp)))
+      resp)))
