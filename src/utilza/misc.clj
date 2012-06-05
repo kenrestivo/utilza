@@ -17,4 +17,4 @@
 (defn static?
   "Check if a page is static"
   [uri]
-  (some #(boolean (re-find % uri)) [#"^/css" #"^/js" #"^/img"]))
+  (some #(re-find % uri) [#"^/css" #"^/js" #"^/img"]))
