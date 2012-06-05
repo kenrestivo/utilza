@@ -35,8 +35,9 @@
      (map (juxt :name :parameter-types)
           (filter #(and
                     (.contains (str (:name %)) srch)      
-                    (not ((comp :private :flags) %)))
+                    ((comp :public :flags) %))
                   (:members (clojure.reflect/reflect obj))))))
+
 
 
 (defn publics 
@@ -102,6 +103,7 @@
     (require ns flag)))
 
 
+;; (use 'clojure.pprint)
 (defn spew [h b]
   (spit "/tmp/log.clj" (str "\n\n;;" h "\n") :append true)
   (spit "/tmp/log.clj" (with-out-str (pprint b)) :append true))
