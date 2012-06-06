@@ -18,3 +18,18 @@
   "Check if a page is static"
   [uri]
   (some #(re-find % uri) [#"^/css" #"^/js" #"^/img"]))
+
+
+(defn reconstruct-url
+  "reconstructs the original url from the ring map"
+  [req]
+  (str
+   (-> req :scheme name)
+   "://"
+   (:server-name req)
+   (when-not (#{80 443} (:server-port req))
+     (str ":" (:server-port req)))
+   (:uri req)
+   (when-not (empty? (:query-string req))
+     (str "?" (:query-string req)))
+   ))
