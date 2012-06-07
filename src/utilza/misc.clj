@@ -22,7 +22,7 @@
 
 (defn reconstruct-url
   "reconstructs the original url from the ring map"
-  [req]
+  [req & strip-query?]
   (str
    (-> req :scheme name)
    "://"
@@ -30,6 +30,6 @@
    (when-not (#{80 443} (:server-port req))
      (str ":" (:server-port req)))
    (:uri req)
-   (when-not (empty? (:query-string req))
+   (when-not (or (empty? (:query-string req)) strip-query?)
      (str "?" (:query-string req)))
    ))
