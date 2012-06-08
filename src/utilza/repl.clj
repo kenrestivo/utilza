@@ -106,4 +106,4 @@
 ;; (use 'clojure.pprint)
 (defn spew [h b]
   (spit "/tmp/log.clj" (str "\n\n;;" h "\n") :append true)
-  (spit "/tmp/log.clj" (with-out-str (pprint b)) :append true))
+  (spit "/tmp/log.clj" (with-out-str (clojure.pprint/pprint b)) :append true))
