@@ -65,26 +65,18 @@
   (filter #(.contains (str %) re) (cp)))
 
 
-(defn envfix
-  "produce the system env in a readable, more clojureish-looking  format"
-  [e]
-  (->> e
-       (map #(vector (keyword (key %)) (val %)))
-       flatten
-       (apply hash-map)))
-
 
 (defn env
   "produce the system env in a readable, more clojureish-looking  format"
   []
-  (envfix (System/getenv)))
+  (into {} (System/getenv)))
 
 
 
 (defn props
   "produce the system env in a readable, more clojureish-looking  format"
   []
-  (envfix (System/getProperties)))
+  (into {} (System/getProperties)))
 
 
 (comment
