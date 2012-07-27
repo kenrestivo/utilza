@@ -4,7 +4,7 @@
   (:require [clojure.reflect]
             [clojure.pprint]
             [clojure.string])
-  (:use 'clojure.pprint))
+  (:use [clojure.pprint]))
 
 
 
