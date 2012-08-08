@@ -19,6 +19,13 @@
      (assoc-in m `(~@path ::self) value))
    {} paths))
 
+
+(defn select-and-rename
+  "Rename keys, selecting only those which match."
+  [map kmap]
+  (clojure.set/rename-keys (select-keys map (keys kmap))
+                           kmap))
+
 (comment ;;; example
   (treeify (map (partial path-to-tree "/")
                 ["/foo/bar/baz/1",
