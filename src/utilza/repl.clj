@@ -60,6 +60,12 @@
   (filter #(.contains (str %) re) (loaded-libs)))
 
 
+(defn all-libs
+  "show all the libs, just for grunts"
+  []
+  (-> (loaded-libs) seq sort pprint))
+  
+
 (defn in-cp 
   "finds some string in the mire of the loaded classpath"
   [re]
