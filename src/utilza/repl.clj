@@ -101,6 +101,12 @@
   (let [flag (if all :reload-all :reload)]
     (require ns flag)))
 
+(defn reload-enter
+  "load the ns and then get into it"
+  [ns & all]
+  (reload-ns ns all)
+  (in-ns ns))
+
 
 (defn spew [h b]
   (spit "/tmp/log.clj" (str "\n\n;;" h "\n") :append true)
