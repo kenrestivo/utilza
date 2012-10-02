@@ -21,6 +21,9 @@
    clojure.pprint/pprint))
 
 
+(defn hjall [o]
+  (org.timmc.handy.repl/show o {:inherit :true} ))
+
 (defn jmethods
   "get the details on  methods/members. "
   ([obj] (jmethods obj ""))
