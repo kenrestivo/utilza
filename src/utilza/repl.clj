@@ -4,7 +4,8 @@
   (:require [clojure.reflect]
             [clojure.pprint]
             [clojure.string])
-  (:use [clojure.pprint]))
+  (:use [clojure.pprint]
+        [org.timmc.handy.repl :only [show] :rename {show hjpub}]))
 
 
 
@@ -67,7 +68,7 @@
   "show all the libs, just for grunts"
   []
   (-> (loaded-libs) seq sort pprint))
-  
+
 
 (defn in-cp 
   "finds some string in the mire of the loaded classpath"
