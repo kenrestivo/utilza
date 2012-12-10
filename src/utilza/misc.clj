@@ -33,3 +33,17 @@
    (when-not (or (empty? (:query-string req)) strip-query?)
      (str "?" (:query-string req)))
    ))
+
+
+
+(defn to-hex-array
+  "Generate static byte arrays for C programming"
+  [s]
+  (-> (for [i (seq s)]
+        (->> i
+             int
+             Integer/toHexString
+             (str "0x")))
+      ((partial interpose ","))
+      pr-str
+      (clojure.string/replace #"[\"\(\)]" "")))
