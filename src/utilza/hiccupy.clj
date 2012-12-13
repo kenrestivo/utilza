@@ -11,15 +11,16 @@
 
 
 (defn tabify
-  "Make nice headers for jquery tabs. Call (html) on it to format it."
-  [m]
+  "Make nice headers for jquery tabs. Call (html) on it to format it.
+   ms is a seq of maps. Each map has :href for URL, and :title for title "
+  [ms]
   [:ul
-   (for [x m]
+   (for [x ms]
      [:li
       [:a {:href (or (:href x) (->> x  :title anchorify (str "#")))}
-       (:title x)]])]
+       [:span (:title x)]]])]
   (for [x m]
-    [:div {:id (-> x :title anchorify )} (:body x)]))
+    [:div {:id (-> x :title anchorify )}]))
 
 
 
