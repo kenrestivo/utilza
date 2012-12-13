@@ -15,12 +15,12 @@
    ms is a seq of maps. Each map has :href for URL, and :title for title "
   [ms]
   [:ul
-   (for [x ms]
+   (for [m ms]
      [:li
-      [:a {:href (or (:href x) (->> x  :title anchorify (str "#")))}
-       [:span (:title x)]]])]
-  (for [x m]
-    [:div {:id (-> x :title anchorify )}]))
+      [:a {:href (or (:href m) (->> m  :title anchorify (str "#")))}
+       [:span (:title m)]]])]
+  (for [m ms]
+    [:div {:id (-> m :title anchorify )}]))
 
 
 
