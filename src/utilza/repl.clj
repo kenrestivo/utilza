@@ -101,7 +101,11 @@
 
 
 ;; i use this all the time
-(defn reload-ns [ns & all]
+(defn reload-ns
+  []
+  (reload-ns (symbol (.getName *ns*)))
+  
+  [ns & all]
   (let [flag (if all :reload-all :reload)]
     (require ns flag)))
 
