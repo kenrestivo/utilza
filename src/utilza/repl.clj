@@ -111,7 +111,7 @@
 (defn reload-enter
   "load the ns and then get into it"
   [tns & all]
-  (reload-ns tns all)
+  (reloadns tns all)
   (in-ns ns))
 
 
