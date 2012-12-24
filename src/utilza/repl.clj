@@ -101,18 +101,17 @@
 
 
 ;; i use this all the time
-(defn reload-ns
-  []
-  (reload-ns (symbol (.getName *ns*)) :reload)
-  
-  [ns & all]
+(defn reloadns
+ ([]
+  (reloadns (symbol (.getName *ns*)) :reload))
+  ([tns & all]
   (let [flag (if all :reload-all :reload)]
-    (require ns flag)))
+    (require tns flag))))
 
 (defn reload-enter
   "load the ns and then get into it"
-  [ns & all]
-  (reload-ns ns all)
+  [tns & all]
+  (reload-ns tns all)
   (in-ns ns))
 
 
