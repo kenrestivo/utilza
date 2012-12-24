@@ -112,7 +112,7 @@
   "load the ns and then get into it"
   [tns & all]
   (reloadns tns all)
-  (in-ns ns))
+  (in-ns tns))
 
 
 (defn spew [h b]
