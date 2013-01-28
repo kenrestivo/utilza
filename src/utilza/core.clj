@@ -16,12 +16,16 @@
   [paths]
   (reduce
    (fn [m [path value]]
+     ;; This quoting business is here only to make ::self qualified in the utilza.core ns
+     ;; Could make it :utilza.core/self and blow off the quoting, if that's less weird.
      (assoc-in m `(~@path ::self) value))
    {} paths))
 
 
 (defn select-and-rename
-  "Rename keys, selecting only those which match."
+  "Takes a target map, and a map of {:old-key :new-key}
+   Rename the keys in the target map, selecting only those which match.
+   Used for pulling crap out of env, etc."
   [map kmap]
   (clojure.set/rename-keys (select-keys map (keys kmap))
                            kmap))

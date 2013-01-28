@@ -14,7 +14,8 @@
 
 
 (defn iso8601-to-rfc822-date
-  "For converting java format dates to javscript format dates"
+  "For converting java format dates to javscript format dates
+   XXX NOTE this should be unnecesary now that we have #inst reader literal in 1.4"
   [isodate]
   (-> (SimpleDateFormat. "EEE, d MMM yyyy HH:mm:ss Z")
       (.format

@@ -23,7 +23,7 @@
      (~f ~@args)))
 
 
- 
+
 (defmacro spewsave [& body]
   "Give it the function and args, i.e. client/get url, but without parens.
    Saves the :body of the request to /tmp/result.html, and returns the headers."
@@ -41,9 +41,9 @@
 
 (comment
   ;; does not work but i'd like it to
-  defmacro only-200
-  [& opts]
-  (let [s (:status `(spewsave ~@opts))]
-    (when (< s 400) (slurp "/tmp/result.html"))))
+  (defmacro only-200
+    [& opts]
+    (let [s (:status `(spewsave ~@opts))]
+      (when (< s 400) (slurp "/tmp/result.html")))))
 
 
