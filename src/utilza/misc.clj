@@ -1,11 +1,11 @@
 (ns utilza.misc
   (:require 
-            [clojure.string]))
+   [clojure.string]))
 
 ;;; file system stuff
 
 (defn intermediate-paths
-  "Takes file-path, a complete path to the file, including the file iteself!
+  "Takes file-path, a complete path to the file, including the file itself!
     Strips off the filename, returns a list of intermediate paths.
     Thanks to emezeke for the reductions device."
   [file-path]

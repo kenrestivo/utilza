@@ -5,7 +5,9 @@
 
 
 (defn anchorify
-  "Make anchors"
+  "Make string safe for usage as an HTML anchor,
+   by removing all the non-alpha chars.
+   WARNING: you could end up with a collision here."
   [s]
   (string/replace s #"[^a-zA-Z]" ""))
 
@@ -26,7 +28,8 @@
 
 
 (defn tablify
-  "Make html table from vector of vectors"
+  "Make html table from vector of vectors,
+  i.e [[r1-c1 r1-c2 r1-c3] [r2-c1 r2-c2 r2-c3] ...  ]"
   [vv]
   [:table  
    (for [r vv]

@@ -115,6 +115,11 @@
   (in-ns tns))
 
 
-(defn spew [h b]
-  (spit "/tmp/log.clj" (str "\n\n;;" h "\n") :append true)
-  (spit "/tmp/log.clj" (with-out-str (clojure.pprint/pprint b)) :append true))
+(defn spew
+  "pretty-print dumps a potentially-massive clojure object into a buffer
+   that will have proper clojure syntax highlighing.
+   This is because pprint in nrepl doesn't syntax highlight, it's all blue.
+   And, this keeps a running log too."
+  [description  structure]
+  (spit "/tmp/log.clj" (str "\n\n;; " description "\n") :append true)
+  (spit "/tmp/log.clj" (with-out-str (clojure.pprint/pprint structure)) :append true))
