@@ -29,3 +29,9 @@
    but close enough for rock n roll, and easier to read/copy/paste."
   []
   (Long/toString (rand Long/MAX_VALUE) 36))
+
+(defn java-thrush
+  "Takes an object, method, and args.
+  For using -> with java methods that return void."
+  [o m & args]
+  (apply m o args))
