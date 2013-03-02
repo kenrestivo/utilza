@@ -34,8 +34,13 @@
   (treeify (map (partial path-to-tree "/")
                 ["/foo/bar/baz/1",
                  "/foo/bar/baz/quux/3"])))
-  
 
 
 
-  
+(defn un-privatize
+  "Takes a namespace and a symbol/var.
+  Force getting access to private vars/symbols/functions/etc"
+  [ns sym]
+  (let [n (if (string? ns) (symbol ns) ns)
+        s (if (string? sym) (symbol sym) sym)]
+    (deref (ns-resolve (the-ns (symbol n)) (symbol s)))))
