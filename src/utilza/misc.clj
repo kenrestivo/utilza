@@ -47,3 +47,11 @@
       ((partial interpose ","))
       pr-str
       (clojure.string/replace #"[\"\(\)]" "")))
+
+
+(defn columnify
+  "Converts a vector of vectors into a vector of maps,
+   which makes it into a  table for print-table,
+   adding the headers as column headings"
+  [headers rows]
+  (map (partial zipmap headers) rows))
