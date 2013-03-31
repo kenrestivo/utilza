@@ -10,6 +10,6 @@ It's not even close to useful for anyone yet.
 
 ## License
 
-Copyright © 2012 ken restivo
+Copyright © 2012-2013 ken restivo
 
 Distributed under the Eclipse Public License, the same as Clojure.
