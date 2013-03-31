@@ -5,8 +5,8 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies []
   :dev-dependencies [
-                     [org.clojure/clojure "1.4.0"]
+                     [org.clojure/clojure "1.5.1"]
                      [noir "1.3.0-beta7"]
                      [clj-http "0.4.1"]
                      [com.ashafa/clutch "0.3.0"]
-                     [org.timmc.handy "1.2.0"]])
+                     [org.timmc.handy "1.5.0"]])

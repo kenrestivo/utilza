@@ -55,3 +55,13 @@
    adding the headers as column headings"
   [headers rows]
   (map (partial zipmap headers) rows))
+
+
+(defn munge-columns
+  "Takes a map km of keys and functions, and a map m,
+   and updates the map to change all values applying
+   function to the key in map m"
+  [km m]
+  (reduce (fn [m [k f]]
+            (update-in m [k] f))
+          m km))
