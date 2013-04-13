@@ -44,3 +44,13 @@
   (let [n (if (string? ns) (symbol ns) ns)
         s (if (string? sym) (symbol sym) sym)]
     (deref (ns-resolve (the-ns (symbol n)) (symbol s)))))
+
+
+(defmacro def-let
+  "like let, but binds the expressions globally.
+   via http://www.learningclojure.com/2010/09/astonishing-macro-of-narayan-singhal.html"
+  [bindings & more]
+  (let [let-expr (macroexpand `(let ~bindings))
+        names-values (partition 2 (second let-expr))
+        defs   (map #(cons 'def %) names-values)]
+    (concat (list 'do) defs more)))
