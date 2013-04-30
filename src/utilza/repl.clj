@@ -67,7 +67,8 @@
 (defn all-libs
   "show all the libs, just for grunts"
   []
-  (-> (loaded-libs) seq sort pprint))
+  (doseq [l (-> (loaded-libs) sort)]
+    (println l)))
 
 
 (defn in-cp 
