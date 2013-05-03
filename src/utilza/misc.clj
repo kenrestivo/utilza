@@ -65,3 +65,13 @@
   (reduce (fn [m [k f]]
             (update-in m [k] f))
           m km))
+
+(defn capitalize-words
+  "Capitalize the first letter of every word in string s
+  For cases where you don't want to import
+  http://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/text/WordUtils.html"
+  [s]
+  (->> (for [s (clojure.string/split s #"\W+")]
+         (clojure.string/capitalize s))
+       (interpose " ")
+       (apply str)))
