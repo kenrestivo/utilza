@@ -63,7 +63,7 @@
    function to the key in map m"
   [km m]
   (reduce (fn [m [k f]]
-            (update-in m [k] f))
+            (if (contains? m k) (update-in m [k] f) m))
           m km))
 
 (defn capitalize-words
