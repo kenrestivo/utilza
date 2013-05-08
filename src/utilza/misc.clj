@@ -75,3 +75,12 @@
          (clojure.string/capitalize s))
        (interpose " ")
        (apply str)))
+
+(defn loop-delay
+  "Excecutes no-args function f endlessly, with delay millisecond delay in between.
+   Returns the Thread so you can cancel it, etc."
+  [f delay]
+  (Thread.  #(while true
+               (do
+                 (f)
+                 (Thread/sleep delay)))))
