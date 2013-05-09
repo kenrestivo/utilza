@@ -63,6 +63,12 @@
   [ms]
   (apply cons ((juxt (comp keys first) (partial map vals)) ms)))
 
+(defn uncolumnify-headers
+  "Takes a sequence of maps.
+   Returns the keys as the first row, followed by all the rows of values."
+  [ms]
+  ((juxt (comp keys first) (partial map vals)) ms))
+
 
 (defn munge-columns
   "Takes a map km of keys and functions, and a map m,
