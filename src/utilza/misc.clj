@@ -57,6 +57,13 @@
   (map (partial zipmap headers) rows))
 
 
+(defn uncolumnify
+  "Takes a sequence of maps.
+   Returns the keys as the first row, followed by all the rows of values."
+  [ms]
+  (apply cons ((juxt (comp keys first) (partial map vals)) ms)))
+
+
 (defn munge-columns
   "Takes a map km of keys and functions, and a map m,
    and updates the map to change all values applying
