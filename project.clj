@@ -1,4 +1,4 @@
-(defproject utilza "0.1.13"
+(defproject utilza "0.1.15"
   :description "ken's random web-related utilities"
   :url "https://github.com/kenrestivo/utilza"
   :license {:name "Eclipse Public License"
@@ -10,6 +10,7 @@
                      [com.ashafa/clutch "0.3.0"]
                      [org.timmc.handy "1.5.0"]]
   :plugins [[lein-cljsbuild "0.3.2" ]]
+  :source-paths ["src" "src-cljs"]
   :cljsbuild {:builds
               [{:id "dev",
                 :source-paths ["src-cljs"],
