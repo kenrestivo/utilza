@@ -54,3 +54,10 @@
         names-values (partition 2 (second let-expr))
         defs   (map #(cons 'def %) names-values)]
     (concat (list 'do) defs more)))
+
+
+(defn map-filter
+  "Applies f to coll. Returns a lazy sequence of the items in coll for which
+   all the items are truthy. f must be free of side-effects."
+  [f coll]
+  (filter identity (apply map f coll)))
