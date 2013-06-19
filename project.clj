@@ -13,6 +13,7 @@
                      [org.slf4j/slf4j-log4j12 "1.6.4"] ;; clown shoes
                      [postgresql "9.1-901-1.jdbc4"]
                      [org.clojure/java.jdbc "0.3.0-alpha1"]
+                     [com.datomic/datomic-free "0.8.4007"]
                      [c3p0/c3p0 "0.9.1.2"]
                      [honeysql "0.3.0"]]
   :plugins [[lein-cljsbuild "0.3.2" ]]
