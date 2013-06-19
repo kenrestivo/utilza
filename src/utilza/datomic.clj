@@ -18,10 +18,11 @@
 (defn load-from-file
   "Load and run bunch of transactions from a file"
   [fname conn]
-  (doseq [tx (-> fname
-                 clojure.java.io/reader 
-                 Util/readAll)]
-    (d/transact conn  tx)))
+  (doall
+   (for [tx (-> fname
+                clojure.java.io/reader 
+                Util/readAll)]
+     @(d/transact conn  tx))))
 
 
 (defn auto-create
@@ -36,5 +37,6 @@
 (defn re-seed
   "Load a seq of files worth of transactions into conn"
   [files conn]
-  (doseq [f files]
-    (load-from-file f conn)))
+  (doall
+   (for [f files]
+     (load-from-file f conn))))
