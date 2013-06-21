@@ -61,3 +61,6 @@
    all the items are truthy. f must be free of side-effects."
   [f coll]
   (filter identity (apply map f coll)))
+
+
+

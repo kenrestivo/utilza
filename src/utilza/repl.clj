@@ -124,3 +124,16 @@
   [description  structure]
   (spit "/tmp/log.clj" (str "\n\n;; " description "\n") :append true)
   (spit "/tmp/log.clj" (with-out-str (clojure.pprint/pprint structure)) :append true))
+
+
+
+(defn massive-spew
+  "Takes a filename to spew to, and a clojure map/tree.
+  Writes a deeply pretty-printed tree to the filename"
+  [out-filename m]
+  (binding [*print-length* 10000 *print-level* 10000]
+    (->> m
+         (#(with-out-str (clojure.pprint/pprint %)))
+         (spit out-filename))))
+
+
