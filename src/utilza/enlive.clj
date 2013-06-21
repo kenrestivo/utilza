@@ -28,6 +28,5 @@
   [out-filename tag]
   (binding [*print-length* 10000 *print-level* 10000]
     (->> tag
-         un-html
          (#(with-out-str (clojure.pprint/pprint %)))
          (spit out-filename))))
