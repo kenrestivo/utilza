@@ -97,3 +97,19 @@
                (do
                  (f)
                  (Thread/sleep delay)))))
+
+
+(defn fix-map
+  "Takes a map of {from-key: to-key}, and returns a function that
+  transforms the keys if they exists in the keymap."
+  [keymap]
+  (fn [k]
+    (if-let [newk (k keymap)]
+      newk
+      k)))
+
+(defn modify-keys
+  "Transform keys in incoming map m to keys in the keymap of {:oldkey :newkey}."
+  [keymap m]
+  (zipmap (map (fix-map keymap) (keys m)) (vals m)))
+

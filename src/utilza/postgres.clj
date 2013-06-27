@@ -2,6 +2,7 @@
   (:require [clojure.java.jdbc :as jdbc]
             [clj-stacktrace.repl :as cst]
             [utilza.log :as log]
+            [utilza.core :as cora]
             [honeysql.core :as sql]
             [clojure.set :as set]
             [clojure.java.jdbc.sql :as fail]
@@ -46,26 +47,11 @@
 
 ;;;;;;;;;;;;;
 
-(defn fix-map
-  [keymap]
-  (fn [k]
-    (if-let [newk (k keymap)]
-      newk
-      k)))
-
-;; TODO: send the result of fix-keymap to jdbc's column-name transform function, whatever it's called.
-(defn modify-keys
-  "Transform keys in incoming map m to keys in the db.
-   table is name of the table as a keyword"
-  [keymap m]
-  (zipmap (map (fix-map keymap) (keys m)) (vals m)))
-
-3
 
 (defn insert!
   [table keymap m]
   {:pre [(not (empty? m))]}
-  (let [mk (modify-keys keymap m)]
+  (let [mk (utilza.core/modify-keys keymap m)]
     (try
       (jdbc/insert! (db) table mk)
       (catch Throwable e
@@ -121,8 +107,8 @@
 
 (defn update!
   [tablename keymap where-map set-map]
-  (let [where-clause (->> where-map (modify-keys keymap) jdbc-where)
-        cleaned-set-map (modify-keys keymap set-map)]
+  (let [where-clause (->> where-map (utilza.core/modify-keys keymap) jdbc-where)
+        cleaned-set-map (utilza.core/modify-keys keymap set-map)]
     (try
       (jdbc/update! (db) tablename cleaned-set-map where-clause)
       (catch java.sql.BatchUpdateException e
@@ -138,7 +124,7 @@
        sql/format
        query
        first
-       (modify-keys (set/map-invert keymap))
+       (utilza.core/modify-keys (set/map-invert keymap))
        empty-as-nil))
 
 
@@ -146,8 +132,8 @@
 (defn update-or-insert
   "Updates or inserts a thing"
   [table-name keymap set-map where-map]
-  (let [record (modify-keys keymap set-map)
-        where-clause (->>  where-map (modify-keys keymap) jdbc-where)]
+  (let [record (utilza.core/modify-keys keymap set-map)
+        where-clause (->>  where-map (utilza.core/modify-keys keymap) jdbc-where)]
     (jdbc/db-transaction [t-con (db)]
                          (let [result (jdbc/update! t-con table-name record where-clause)]
                            (if (zero? (first result))
@@ -160,7 +146,7 @@
   "Takes a table, keymap, and map, and produces a formatted search for matches."
   [table-name keymap m]
   (as-> m <>
-        (modify-keys keymap <>)
+        (utilza.core/modify-keys keymap <>)
         (where-ize <>)
         (assoc {} :where <>)
         (merge <> (sql/build :select :* :from table-name))))
