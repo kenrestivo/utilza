@@ -40,3 +40,15 @@
   (doall
    (for [f files]
      (load-from-file f conn))))
+
+
+
+(defn find-by-other-key
+  "Finds an entity by a pseudo key, or if not found, returns a new key."
+  [m k part]
+  (or (db/fq '[:find  ?e
+               :in $ ?k ?v
+               :where [?e ?k ?v]]
+             k
+             (k m))
+      (d/tempid part)))
