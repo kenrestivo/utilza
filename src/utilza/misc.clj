@@ -1,6 +1,6 @@
 (ns utilza.misc
   (:require 
-   [clojure.string]))
+   [clojure.string :as string]))
 
 ;;; file system stuff
 
@@ -9,8 +9,8 @@
     Strips off the filename, returns a list of intermediate paths.
     Thanks to emezeke for the reductions device."
   [file-path]
-  (let [paths (pop (clojure.string/split file-path  #"\/"))]
-    (map #(clojure.string/join "/" %) (rest (reductions conj [] paths)))))
+  (let [paths (pop (string/split file-path  #"\/"))]
+    (map #(string/join "/" %) (rest (reductions conj [] paths)))))
 
 
 
