@@ -1,6 +1,7 @@
 ;;; miscellaneous stuff
 
-(ns utilza.core)
+(ns utilza.core
+  (:require [clojure.set :as set]))
 
 
 
@@ -64,3 +65,8 @@
 
 
 
+(defn modify-keys
+  "Basically set/rename-keys with the arg order swapped."
+  [keymap m]
+  (clojure.set/rename-keys map keymap))
+  
