@@ -57,3 +57,4 @@
   [m part fkey kmap]
   (let [m1 (cora/select-and-rename m kmap)]
     [(id-by-key m1 fkey part) m1]))
+
