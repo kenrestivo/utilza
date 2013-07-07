@@ -58,3 +58,55 @@
   (let [m1 (cora/select-and-rename m kmap)]
     [(id-by-key m1 fkey part) m1]))
 
+
+
+(defn id-by-key
+  [db m k]
+  {:pre [(-> k nil? not)
+         (map? m)]}
+  (or (ffirst (d/q '[:find  ?e
+                     :in $ ?k ?v
+                     :where [?e ?k ?v]]
+                   db
+                   k
+                   (k m)))
+      (d/tempid :db.part/superpinners)))
+
+
+(defn select-rename-find
+  "Takes a map, an external key fkey, and a keymap of transforms {:from-key :to-key}.
+  Returns the map filtered to only include keys in keymap, with either a
+  tempid or the id of whatever was found using fkey."
+  [db m fkey kmap]
+  (let [m1 (cora/select-and-rename m kmap)]
+    (assoc m1 :db/id (id-by-key db m1 fkey))))
+
+
+
+
+(defn find-by-key
+  "Gets all entity ID's which have key k"
+  [db k]
+  {:pre [(-> k nil? not)]}
+  (d/q '[:find  ?e
+         :in $ ?k 
+         :where [?e ?k  _]]
+       db
+       k))
+
+
+(defn one-kv
+  "Gets one and only one entity id for given key and value"
+  [db k v]
+  {:pre [(-> k nil? not)]}
+  (ffirst
+   (d/q '[:find ?e
+         :in $ ?k ?v
+         :where [?e ?k ?v]]
+       db
+       k
+       v)))
+
+
+
+
