@@ -68,9 +68,9 @@
   "Takes a map, an external key fkey, and a keymap of transforms {:from-key :to-key}.
   Returns the map filtered to only include keys in keymap, with either a
   tempid or the id of whatever was found using fkey."
-  [db m fkey kmap]
+  [db part m fkey kmap]
   (let [m1 (cora/select-and-rename m kmap)]
-    (assoc m1 :db/id (id-by-key db m1 fkey))))
+    (assoc m1 :db/id (id-by-key db m1 fkey part))))
 
 
 
