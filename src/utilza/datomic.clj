@@ -44,24 +44,7 @@
 
 
 (defn id-by-key
-  "Finds an entity id by a pseudo key, or if not found, returns a new key."
-  [m k part]
-  (or (fq '[:find  ?e
-               :in $ ?k ?v
-               :where [?e ?k ?v]]
-             k
-             (k m))
-      (d/tempid part)))
-
-(defn map-and-id
-  [m part fkey kmap]
-  (let [m1 (cora/select-and-rename m kmap)]
-    [(id-by-key m1 fkey part) m1]))
-
-
-
-(defn id-by-key
-  [db m k]
+  [db m k part]
   {:pre [(-> k nil? not)
          (map? m)]}
   (or (ffirst (d/q '[:find  ?e
@@ -70,7 +53,15 @@
                    db
                    k
                    (k m)))
-      (d/tempid :db.part/superpinners)))
+      (d/tempid part)))
+
+
+(defn map-and-id
+  [m part fkey kmap]
+  (let [m1 (cora/select-and-rename m kmap)]
+    [(id-by-key m1 fkey part) m1]))
+
+
 
 
 (defn select-rename-find
