@@ -99,3 +99,15 @@
                  (Thread/sleep delay)))))
 
 
+(defn display-bucket
+  [divisor [k v]]
+  [(-> k  (* divisor) (+ divisor) int) v])
+
+(defn bucket-frequencies
+  [divisor vals]
+  (->> (for [v vals]
+         (-> v
+             (/  divisor)
+             int))
+       frequencies
+       (map (partial display-bucket divisor))))
