@@ -101,7 +101,7 @@
 
 (defn display-bucket
   [divisor [k v]]
-  [(-> k  (* divisor) (+ divisor) int) v])
+  [(-> k  (* divisor) (+ divisor) (- divisor) int) v])
 
 (defn bucket-frequencies
   [divisor vals]
