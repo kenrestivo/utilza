@@ -111,3 +111,14 @@
              int))
        frequencies
        (map (partial display-bucket divisor))))
+
+
+
+(defn sort-map-fn
+  "Takes a vector of keys in the order you want them sorted,
+   returns a function that will take a map and return a
+   sorted map with the keys in the right order."
+  [ordered-keys]
+  #(into (sorted-map-by
+          (fn [k1 k2]
+            (< (.indexOf ordered-keys k1) (.indexOf ordered-keys k2)))) %))
