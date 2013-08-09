@@ -92,12 +92,50 @@
   {:pre [(-> k nil? not)]}
   (ffirst
    (d/q '[:find ?e
-         :in $ ?k ?v
-         :where [?e ?k ?v]]
-       db
-       k
-       v)))
+          :in $ ?k ?v
+          :where [?e ?k ?v]]
+        db
+        k
+        v)))
+
+
+(defn not-set?
+  "Equivalent to IS NULL in SQL. Very useful. Thanks to tomjack on IRC."
+  [db e a]
+  (nil? (seq (d/datoms db :eavt e a))))
 
 
 
+(defn unique-or-temp
+  "Utility to obtain an eid for a synthetic unique key, or generate a tempid if it's not there."
+  [db partition k v]
+  ;; TODO: throw if > 1 count?
+  (if-let [e (->> v (d/datoms db :avet k) first :e)]
+    e
+    (d/tempid partition)))
 
+
+(defn one-index
+  "Utility to obtain an eid for an indexed key k and value v."
+  [db k v]
+  (->> v (d/datoms db :avet k) first :e))
+
+
+(defn ssquuid
+  "Returns a string representation of a squuid"
+  []
+  (str (d/squuid)))
+
+
+(defn add-ssquuid
+  [db key-to-check key-to-add]
+  (for [id (d/q '[:find  ?u
+                  :in $ ?c ?a
+                  :where
+                  [?u ?c _]
+                  [(utilza.datomic/not-set? $ ?u ?a)]
+                  ]
+                db
+                key-to-check
+                key-to-add)]
+    [:db/add (first id) key-to-add (ssquuid)]))

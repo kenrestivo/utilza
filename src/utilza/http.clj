@@ -36,7 +36,7 @@
 
 
 (defmacro spew-nocookie [& body]
-  "Give it the function and args, i.e. client/get url, but without parens.
+  "Give it the function and args, i.e. client/get url, with parens.
   Doesnt' do anything special with cookie stores.
   If there are exceptions, returns them instead of throwing them.
    Saves the :body of the request to /tmp/result.html, and returns the headers and status."
