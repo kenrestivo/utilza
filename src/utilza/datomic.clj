@@ -104,21 +104,19 @@
   [db e a]
   (nil? (seq (d/datoms db :eavt e a))))
 
-
+(defn one-index
+  "Utility to obtain an eid for an indexed key k and value v."
+  [db k v]
+  (->> v (d/datoms db :avet k) first :e))
 
 (defn unique-or-temp
   "Utility to obtain an eid for a synthetic unique key, or generate a tempid if it's not there."
   [db partition k v]
   ;; TODO: throw if > 1 count?
-  (if-let [e (->> v (d/datoms db :avet k) first :e)]
+  (if-let [e (one-index db k v)]
     e
     (d/tempid partition)))
 
-
-(defn one-index
-  "Utility to obtain an eid for an indexed key k and value v."
-  [db k v]
-  (->> v (d/datoms db :avet k) first :e))
 
 
 (defn ssquuid
