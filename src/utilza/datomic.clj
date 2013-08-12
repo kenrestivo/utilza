@@ -104,6 +104,19 @@
   [db e a]
   (nil? (seq (d/datoms db :eavt e a))))
 
+
+(defn ea-get
+  "Takes db, an alternate value, entity id, and attribute.
+   Searches datoms for that entity with that attribute.
+   Returns the datom, or the alternate value (nil, 0, etc) if not present."
+  [db alt e a]
+  (let [res (d/datoms db :eavt e a)]
+    (if (seq res)
+      res
+      alt)))
+
+
+
 (defn one-index
   "Utility to obtain an eid for an indexed key k and value v."
   [db k v]
