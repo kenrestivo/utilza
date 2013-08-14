@@ -108,7 +108,8 @@
 (defn get-ea
   "Takes db, an alternate value, entity id, and attribute.
    Searches datoms for that entity with that attribute.
-   Returns the value of that datom, or the alternate value (nil, 0, etc) if not present."
+   Returns the value of that datom, or the alternate value (nil, 0, etc) if not present.
+   This is an equivalent to an (IF NULL) in SQL."
   [db alt e a]
   (if-let [res (->> (d/datoms db :eavt e a) first :v)]
       res
