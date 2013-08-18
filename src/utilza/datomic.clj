@@ -150,3 +150,19 @@
                 key-to-check
                 key-to-add)]
     [:db/add (first id) key-to-add (ssquuid)]))
+
+
+(defn convert-uuid
+  "Convert a string UUID to an actual UUID"
+  [db from-key to-key]
+  (for [id (d/q '[:find ?u ?v
+                  :in $ ?fk ?tk
+                  :where
+                  [?u ?fk ?v]
+                  [(utilza.datomic/not-set? $ ?u ?tk)]
+                  ]
+                db
+                from-key
+                to-key)]
+    [[:db/add (first id) to-key (java.util.UUID/fromString (second id))]
+     [:db/retract (first id) from-key (second id)]]))
