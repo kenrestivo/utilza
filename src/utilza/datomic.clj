@@ -87,7 +87,8 @@
 
 
 (defn one-kv
-  "Gets one and only one entity id for given key and value"
+  "Gets one and only one entity id for given key and value.
+   For attributes that are indexed, use one-index instead, it's faster."
   [db k v]
   {:pre [(-> k nil? not)]}
   (ffirst
@@ -166,3 +167,8 @@
                 to-key)]
     [[:db/add (first id) to-key (java.util.UUID/fromString (second id))]
      [:db/retract (first id) from-key (second id)]]))
+
+(defn exists?
+  "Returns true if the eid exists in the db"
+  [db eid]
+  (not (empty? (d/q '[:find ?e :in $ ?e :where [?e]] db eid))))
