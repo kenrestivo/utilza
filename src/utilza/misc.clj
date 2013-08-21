@@ -122,3 +122,15 @@
   #(into (sorted-map-by
           (fn [k1 k2]
             (< (.indexOf ordered-keys k1) (.indexOf ordered-keys k2)))) %))
+
+
+(defn make-histogram-cumulative
+  "Takes a histogram of [[x y] ...] where x is the count of occurences and y is the value,
+   ordered from least to greatest y.
+  Returns a histogram of [[x cumulative-y] .. ]" 
+  [histogram]
+  (first (reduce (fn [[new-acc old-acc] [x y]]
+            [(conj new-acc [x (+ y (apply + (map second old-acc)))])
+             (conj old-acc [x y])])
+          []
+          histogram)))
