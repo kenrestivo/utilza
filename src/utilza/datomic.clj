@@ -44,6 +44,8 @@
 
 
 (defn id-by-key
+  "Searches for an entity id where the key-value pair is present.
+   Returns that, or a tempid in part if not found"
   [db m k part]
   {:pre [(-> k nil? not)
          (map? m)]}

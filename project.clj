@@ -1,9 +1,10 @@
-(defproject utilza "0.1.32"
+(defproject utilza "0.1.33"
   :description "ken's random web-related utilities"
   :url "https://github.com/kenrestivo/utilza"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.5.1"]]
+  :dependencies [[org.clojure/clojure "1.5.1"]
+                 [org.timmc/handy "1.5.0" :exclusions [org.clojure/clojure]]]
   :dev-dependencies [
                      [noir "1.3.0-beta7"]
                      [clj-http "0.4.1"]
