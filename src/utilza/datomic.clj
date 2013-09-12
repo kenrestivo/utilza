@@ -174,3 +174,33 @@
   "Returns true if the eid exists in the db"
   [db eid]
   (not (empty? (d/q '[:find ?e :in $ ?e :where [?e]] db eid))))
+
+
+
+(defn all-kv
+  "Gets the entity and all its attributes, from a k an v."
+  [db k v]
+  (->> (one-kv db k v)
+       (d/entity db)
+       d/touch))
+
+(comment
+  (defn get-unindexed-ea
+    "Takes db, an alternate value, entity id, and attribute.
+   Searches datoms for that entity with that attribute.
+   Returns the value of that datom, or the alternate value (nil, 0, etc) if not present.
+   This is an equivalent to an (IF NULL) in SQL."
+    [db alt e a]
+    (if-let [res (->> (d/q  '[:find  ?v
+                              :in $  ?e ?a
+                              :where
+                              [?e ?a ?v]
+                              ]
+                            db
+                            e
+                            a
+                            )
+                      ffirst)]
+      res
+      alt))
+  )
