@@ -77,6 +77,15 @@
 
 
 
+(defn find-by-index
+  "Gets all indexed entity id's which have key k"
+  [db k]
+  {:pre [(-> k nil? not)]}
+  (->> k
+       (d/datoms db :avet)
+       (map :e)))
+
+
 (defn find-by-key
   "Gets all entity ID's which have key k"
   [db k]
@@ -87,6 +96,27 @@
        db
        k))
 
+
+(defn count-by-key
+  "Gets count of all entity ID's which have key k"
+  [db k]
+  {:pre [(-> k nil? not)]}
+  (->>  (d/q '[:find  (count ?e)
+               :in $ ?k 
+               :where [?e ?k  _]]
+             db
+             k)
+        ffirst))
+
+
+(defn count-by-index
+  "Gets count of all entity ID's which have key k"
+  [db k]
+  {:pre [(-> k nil? not)]}
+  (->> k
+       (d/datoms db :avet)
+       seq
+       count))
 
 (defn one-kv
   "Gets one and only one entity id for given key and value.
@@ -115,8 +145,8 @@
    This is an equivalent to an (IF NULL) in SQL."
   [db alt e a]
   (if-let [res (->> (d/datoms db :eavt e a) first :v)]
-      res
-      alt))
+    res
+    alt))
 
 
 
