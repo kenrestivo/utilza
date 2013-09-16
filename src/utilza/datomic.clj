@@ -2,6 +2,7 @@
 
 (ns utilza.datomic
   (:require [datomic.api :as d]
+            [clojure.tools.logging :as log]
             [utilza.core :as cora])
   (:import datomic.Util))
 
@@ -213,6 +214,70 @@
   (->> (one-kv db k v)
        (d/entity db)
        d/touch))
+
+
+(defn child-without-loop
+  "Takes a key for finding the parent, and an entity (map).
+   Recurses up parents through the directed graph.
+   Will stop and log an error if a cycle is detected, and return the graph up to that point.
+   Returns a seq of the child entities in order they were traversed (bottom to top)."
+  [k e]
+  (loop [m e
+         result [e]]
+    (let [child (k m)
+          cycle-detected? (some #(= % (:db/id child)) (map :db/id result))]
+      (when cycle-detected?
+        (log/error (apply format "Cycle detected! orig map: %s, map %s, child %s, accumulator %s "
+                          (map pr-str [e m child result]))))
+      (if (or (nil? child) cycle-detected?)
+        result
+        (recur child
+               (conj result child))))))
+
+
+(defn child-ancestry
+  "Utility function used in datomic queries to return a seq of a child's eid path to its ultimate parent.
+   Takes a database and a child's eid."
+  [db k eid]
+  (->> eid
+       (d/entity db)
+       ;; TODO: don't use iterate, have to look for duplicates which would be a loop.
+       (child-without-loop k)
+       rest ;; the first one is itself
+       (map :db/id)))
+
+
+(defn child-depth
+  "Utility function used in datomic queries to count the depth of a child.
+   Takes a database and a child's eid.
+   Returns the count of levels for that child."
+  [db k eid]
+  (->> eid
+       (child-ancestry db k)
+       count))
+
+
+
+(defn merge-duplicates
+  "Takes a db handle, and a list of EID's, master EID first.
+   Generates transactions tha merge all eid's attributes into the first EID,
+   qand retracts all the other eids"
+  [db eids]
+  (let [[keep & undo] eids]
+    (vector (for [u undo]
+              [:db.fn/retractEntity u])
+            (concat (->> (concat (for [ds (map (partial d/datoms db :eavt) undo)]
+                                   (for [{:keys [e a v added ]} ds :when added]
+                                     [[:db/retract e a v]
+                                      [:db/add keep a v]]))
+                                 (for [ds (map (partial d/datoms db :vaet) undo)]
+                                   (for [{:keys [e a v added]} ds :when added]
+                                     [[:db/retract  e a v]
+                                      [:db/add e a keep]])))
+                         flatten
+                         (partition 4)
+                         (map vec))))))
+
 
 (comment
   (defn get-unindexed-ea
