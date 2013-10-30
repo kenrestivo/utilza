@@ -279,6 +279,18 @@
                          (map vec))))))
 
 
+
+(defn find-all-by-attr
+  "Returns all entities/values containing attribute attr"
+  [db attr]
+  (d/q '[:find ?e ?v
+         :in $ ?a
+         :where
+         [?e ?a ?v]
+         ]
+       db
+       attr))
+
 (comment
   (defn get-unindexed-ea
     "Takes db, an alternate value, entity id, and attribute.
@@ -299,3 +311,4 @@
       res
       alt))
   )
+
