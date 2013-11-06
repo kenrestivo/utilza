@@ -103,11 +103,11 @@
 
 ;; i use this all the time
 (defn reloadns
- ([]
-  (reloadns (symbol (.getName *ns*)) :reload))
+  ([]
+     (reloadns (symbol (.getName *ns*)) :reload))
   ([tns & all]
-  (let [flag (if all :reload-all :reload)]
-    (require tns flag))))
+     (let [flag (if all :reload-all :reload)]
+       (require tns flag))))
 
 (defn reload-enter
   "load the ns and then get into it"
@@ -137,3 +137,11 @@
          (spit out-filename))))
 
 
+(defmacro def-let
+  "Like let, but binds the expressions globally.
+   Lifted from http://www.learningclojure.com/2010/09/astonishing-macro-of-narayan-singhal.html"
+  [bindings & more]
+  (let [let-expr (macroexpand `(let ~bindings))
+        names-values (partition 2 (second let-expr))
+        defs   (map #(cons 'def %) names-values)]
+    (concat (list 'do) defs more)))
