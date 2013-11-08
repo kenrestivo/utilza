@@ -131,9 +131,8 @@
   (let [sorted (->> histogram (sort-by first) reverse)
         vs (map second sorted)
         ks (map first sorted)]
-    (map vector ks 
-         (reduce (fn [acc v]
-                   (conj acc (+' v (or (last acc) 0))))
-                 []
-                 vs))))
+    (map vector ks (reduce (fn [acc v]
+                             (conj acc (+' v (or (last acc) 0))))
+                           []
+                           vs))))
 
