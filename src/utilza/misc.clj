@@ -125,12 +125,19 @@
 
 
 (defn make-histogram-cumulative
-  "Takes a histogram of [[x y] ...] where x is the count of occurences and y is the value,
-   ordered from least to greatest y.
-  Returns a histogram of [[x cumulative-y] .. ]" 
+  "Takes a histogram of {v c, ... } where c is the count of occurences and v is the value.
+  Returns a histogram of [[v cumulative-c] .. ] in descending order of c."
   [histogram]
-  (first (reduce (fn [[new-acc old-acc] [x y]]
-            [(conj new-acc [x (+ y (apply + (map second old-acc)))])
-             (conj old-acc [x y])])
-          []
-          histogram)))
+  (let [sorted (->> histogram (sort-by first) reverse)
+        vs (map second sorted)
+        ks (->> sorted (map first) reverse)]
+    (map vector ks 
+         (reduce (fn [acc v]
+                   (conj acc (+' v (or (first acc) 0))))
+                 '()
+                 vs))))
+
+
+
+
+
