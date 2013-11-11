@@ -124,6 +124,7 @@
             (< (.indexOf ordered-keys k1) (.indexOf ordered-keys k2)))) %))
 
 
+;; TODO: take a sort-by function as an arg
 (defn make-histogram-cumulative
   "Takes a histogram of {v c, ... } where c is the count of occurences and v is the value.
   Returns a histogram of [[v cumulative-c] .. ] in descending order of v."
