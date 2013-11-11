@@ -20,6 +20,7 @@
 /target
 out
 pom.xml
+pom.xml.*
 resources/*-ensured.properties
 resources/*-template.json
 resources/public/js/main-dev.js
