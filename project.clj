@@ -1,4 +1,4 @@
-(defproject utilza "0.1.40"
+(defproject utilza "0.1.41"
   :description "ken's random web-related utilities"
   :url "https://github.com/kenrestivo/utilza"
   :license {:name "Eclipse Public License"
@@ -17,6 +17,7 @@
                      [com.datomic/datomic-free "0.8.4007"]
                      [com.google.zxing/client "2.1"]
                      [com.google.zxing/javase "2.1"]
+                     [commons-codec/commons-codec "1.8"]
                      [c3p0/c3p0 "0.9.1.2"]
                      [honeysql "0.3.0"]]
   :plugins [[lein-cljsbuild "0.3.2" ]]

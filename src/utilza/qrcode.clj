@@ -15,14 +15,14 @@
 
 (defn qr-decode
   [fname]
-  (->> fname
-       clojure.java.io/input-stream
-       ImageIO/read
-       BufferedImageLuminanceSource.
-       HybridBinarizer.
-       BinaryBitmap.
-       (.decode (QRCodeReader.))
-       .toString))
+  (with-open [i (clojure.java.io/input-stream fname)]
+    (->> i
+         ImageIO/read
+         BufferedImageLuminanceSource.
+         HybridBinarizer.
+         BinaryBitmap.
+         (.decode (QRCodeReader.))
+         .toString)))
 
 
 (comment
