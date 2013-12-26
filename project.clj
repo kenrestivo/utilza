@@ -1,4 +1,4 @@
-(defproject utilza "0.1.41"
+(defproject utilza "0.1.42"
   :description "ken's random web-related utilities"
   :url "https://github.com/kenrestivo/utilza"
   :license {:name "Eclipse Public License"
@@ -19,7 +19,8 @@
                      [com.google.zxing/javase "2.1"]
                      [commons-codec/commons-codec "1.8"]
                      [c3p0/c3p0 "0.9.1.2"]
-                     [honeysql "0.3.0"]]
+                     [honeysql "0.3.0"]
+                     [neko/neko "3.0.0"]]
   :plugins [[lein-cljsbuild "0.3.2" ]]
   :source-paths ["src" "src-cljs"]
   :cljsbuild {:builds
