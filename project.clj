@@ -15,7 +15,7 @@
                      [postgresql "9.1-901-1.jdbc4"]
                      [org.clojure/java.jdbc "0.3.0-alpha1"]
                      [com.datomic/datomic-free "0.8.4007"]
-                     [com.google.zxing/client "2.1"]
+                     [com.google.zxing/core "2.1"]
                      [com.google.zxing/javase "2.1"]
                      [commons-codec/commons-codec "1.8"]
                      [c3p0/c3p0 "0.9.1.2"]
