@@ -25,3 +25,4 @@ resources/*-ensured.properties
 resources/*-template.json
 resources/public/js/main-dev.js
 resources/public/js/main.js
+doc/uberdoc.html

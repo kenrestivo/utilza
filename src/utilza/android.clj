@@ -3,6 +3,7 @@
   (:import android.os.Handler
            android.os.HandlerThread
            android.content.ComponentName
+           android.content.pm.PackageInfo
            android.content.Intent))
 
 (defn periodic
@@ -29,3 +30,13 @@
                     (.setAction Intent/ACTION_MAIN)
                     (.addFlags Intent/FLAG_ACTIVITY_NEW_TASK)
                     (.setComponent  (ComponentName. pkg-name (str pkg-name "." activity-name))))))
+
+
+(defn get-version-info
+  "Returns a map of :version-name and :version-number for given package-name"
+  [^String package-name]
+  (let [^PackageInfo pi (-> context/context
+               .getPackageManager
+               (.getPackageInfo package-name 0))]
+    {:version-name (.versionName pi)
+     :version-number (.versionCode pi)}))

@@ -1,7 +1,8 @@
 ;;; misc wrappers around commonly-used java functions
 
 (ns utilza.java
-  (:import (java.text SimpleDateFormat)))
+  (:import (java.text SimpleDateFormat)
+           java.util.Date))
 
 
 
@@ -35,3 +36,16 @@
   For using -> with java methods that return void."
   [o m & args]
   (apply m o args))
+
+
+(defn epoch->java-date
+  "Convert a unix epoch to a java date (clojure #inst)"
+  [n]
+  (-> n (* 1000) Date. ))
+
+(defn byteify
+  "Turns seq of integers or bytes into java byte array"
+  [s]
+  (->> s
+       (map unchecked-byte)
+       (into-array Byte/TYPE)))
