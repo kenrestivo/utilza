@@ -71,10 +71,3 @@
   (clojure.set/rename-keys map keymap))
 
 
-(defn byteify
-  "Convert seq of signed integers into array of bytes.
-   For use with binary protocols"
-  [s]
-  (->> s
-       (map unchecked-byte)
-       (into-array Byte/TYPE)))

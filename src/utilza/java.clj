@@ -45,7 +45,7 @@
 
 (defn byteify
   "Turns seq of integers or bytes into java byte array"
-  [s]
-  (->> s
+  [ints]
+  (->> ints
        (map unchecked-byte)
        (into-array Byte/TYPE)))
