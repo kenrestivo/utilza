@@ -12,6 +12,13 @@
    com.google.zxing.qrcode.QRCodeReader))
 
 
+(defn image-to-stream
+  "Turns an image into something that ring can deal with"
+  [img]
+  (let [os (ByteArrayOutputStream.)]
+    (ImageIO/write img (:type settings) os)
+    (.toByteArray os)))
+
 
 (defn qr-decode
   [fname]
