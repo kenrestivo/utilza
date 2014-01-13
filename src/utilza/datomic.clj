@@ -301,7 +301,7 @@
                                    (if (= (type e) datomic.query.EntityMap)
                                      (d/touch (d/entity db (:db/id e)))
                                      e)))]
-                (= datomic.query.EntityMap (type v)) [k (d/entity db (:db/id v))]
+                (= datomic.query.EntityMap (type v)) [k (d/touch (d/entity db (:db/id v)))]
                 :else  [k v]))))
 
 (comment
