@@ -291,6 +291,19 @@
        db
        attr))
 
+
+(defn recurse-1-entity
+  "Grab a single level of recursion through an already-touched entity"
+    [db ent]
+    (into {} (for [[k v] ent]
+               (cond
+                (set? v) [k (set (for [e v]
+                                   (if (= (type e) datomic.query.EntityMap)
+                                     (d/touch (d/entity db (:db/id e)))
+                                     e)))]
+                (= datomic.query.EntityMap (type v)) [k (d/entity db (:id v))]
+                :else  [k v]))))
+
 (comment
   (defn get-unindexed-ea
     "Takes db, an alternate value, entity id, and attribute.
