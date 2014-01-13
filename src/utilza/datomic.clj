@@ -296,13 +296,13 @@
   "Grab a single level of recursion through an already-touched entity"
   [db ent]
   (into {} (for [[k v] ent]
-             (cond
-              (set? v) [k (set (for [e v]
+             [k (cond
+                 (set? v) (set (for [e v]
                                  (if (= (type e) datomic.query.EntityMap)
                                    (->> e :db/id (d/entity db) d/touch)
-                                   e)))]
-              (= datomic.query.EntityMap (type v)) [k (->> v :db/id (d/entity db) d/touch)]
-              :else  [k v]))))
+                                   e)))
+                 (= datomic.query.EntityMap (type v)) (->> v :db/id (d/entity db) d/touch)
+                 :else  v)])))
 
 (comment
   (defn get-unindexed-ea
