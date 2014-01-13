@@ -304,6 +304,15 @@
                  (= datomic.query.EntityMap (type v)) (->> v :db/id (d/entity db) d/touch)
                  :else  v)])))
 
+
+
+(defn read-datomic-edn
+  [edn-file]
+  (->> edn-file
+       slurp
+       (clojure.edn/read-string {:readers *data-readers*})))
+
+
 (comment
   (defn get-unindexed-ea
     "Takes db, an alternate value, entity id, and attribute.
