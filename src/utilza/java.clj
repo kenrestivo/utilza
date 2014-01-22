@@ -49,3 +49,22 @@
   (->> ints
        (map unchecked-byte)
        (into-array Byte/TYPE)))
+
+
+(defn format-bytes
+  "Takes a java byte-array, returns a seq of  hex strings with 0x prepended"
+  [byte-array]
+  (for [b byte-array]
+    (->> b
+         (bit-and 0xff)
+         (format"0x%02x"))))
+
+(defn format-bytes-edn
+  "Takes a java byte array, returns EDN string of a seq of hex bytes."
+  [byte-array]
+  (-> byte-array
+      format-bytes
+      (as-> x
+            (binding [*print-length* 100000 *print-level* 100000]
+              (with-out-str (clojure.pprint/pprint x))))
+      (.replace "\"" "")))
