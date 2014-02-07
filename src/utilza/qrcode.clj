@@ -1,4 +1,4 @@
-(ns qrcode
+(ns utilza.qrcode
   (:import 
    javax.imageio.ImageIO
    [com.google.zxing.client.j2se
