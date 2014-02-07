@@ -1,4 +1,4 @@
-(ns base32
+(ns utilza.base32
   (:import  org.apache.commons.codec.binary.Base32))
 
 
