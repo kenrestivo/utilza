@@ -76,3 +76,10 @@
   [start end]
   (take-while #(or (.isBefore %  end) (= % end))
               (iterate #(.plusDays % 1) (DateTime. start))))
+
+(defn write-file
+  "Hack to save anarray of bytes to filename.
+   Based on http://stackoverflow.com/questions/11321264/saving-an-image-form-clj-http-request-to-file"
+  [bytes filename]
+  (with-open [w (clojure.java.io/output-stream filename)]
+    (.write w bytes)))
