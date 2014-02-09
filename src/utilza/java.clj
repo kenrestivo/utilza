@@ -2,7 +2,8 @@
 
 (ns utilza.java
   (:import (java.text SimpleDateFormat)
-           java.util.Date))
+           java.util.Date
+           org.joda.time.DateTime))
 
 
 
@@ -68,3 +69,10 @@
             (binding [*print-length* 100000 *print-level* 100000]
               (with-out-str (clojure.pprint/pprint x))))
       (.replace "\"" "")))
+
+
+(defn date-range
+  "Generates lazy seq of range of dates incremented by 1 day"
+  [start end]
+  (take-while #(or (.isBefore %  end) (= % end))
+              (iterate #(.plusDays % 1) (DateTime. start))))
