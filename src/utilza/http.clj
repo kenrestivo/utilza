@@ -49,6 +49,14 @@
   []
   (require '[clj-http.client :as client]))
 
+
+(defn write-file
+  "Hack to save a clj-http gotten array of bytes to filename.
+   Based on http://stackoverflow.com/questions/11321264/saving-an-image-form-clj-http-request-to-file"
+  [bytes filename]
+  (with-open [w (clojure.java.io/output-stream filename)]
+    (.write w bytes)))
+
 (comment
   ;; does not work but i'd like it to
   (defmacro only-200
