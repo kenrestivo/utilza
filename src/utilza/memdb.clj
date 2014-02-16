@@ -24,11 +24,12 @@
   ([]
      (-> env/env :db-filename save-data!))
   ([dbfilename]
-     (let [tmpfile (str dbfilename ".tmp")]
-       (send-off save-agent
-                 (fn [_]
-                   (spit tmpfile (prn-str @db))
-                   (.renameTo (File. tmpfile) (File. dbfilename)))))))
+     (binding [*print-length* 10000000 *print-level* 10000000]
+       (let [tmpfile (str dbfilename ".tmp")]
+         (send-off save-agent
+                   (fn [_]
+                     (spit tmpfile (prn-str @db))
+                     (.renameTo (File. tmpfile) (File. dbfilename))))))))
 
 
 (defn read-data!
