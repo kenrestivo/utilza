@@ -57,3 +57,25 @@
       (log/info "Loading db first." (:db-filename env/env))
       (read-data!)
       (log/info "DB loaded (presumably)"))))
+
+
+
+(defn key-set-counts
+  "Gets counts for all unique records in db which satisfy key function."
+  [k]
+  (->> (for [d (->> @db
+                    vals
+                    (map k)
+                    set)]
+         [d (count (filter (partial = d) (map k (vals @db))))])
+       (sort-by second)
+       reverse))
+
+(defn total-not-null-counts
+  "Finds total count of all records with not-nul key satisfying function k."
+  [k]
+  (->> @db
+       vals
+       (filter k)
+       count))
+
