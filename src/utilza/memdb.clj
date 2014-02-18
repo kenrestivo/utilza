@@ -60,22 +60,23 @@
 
 
 
+(defn all-keys
+  [db k]
+  (reduce #(conj %1 %2)
+          #{}
+          (r/map k (-> db vals))))
+
 (defn key-set-counts
   "Gets counts for all unique records in db which satisfy key function."
-  [k]
-  (->> (for [d (->> @db
-                    vals
-                    (map k)
-                    set)]
-         [d (count (filter (partial = d) (map k (vals @db))))])
+  [db k]
+  (->> (for [d (all-keys db k)]
+         [d (reduce (fn [c _] (inc c))  0 (r/filter (partial = d) (r/map k (vals db))))])
        (sort-by second)
        reverse))
 
 (defn total-not-null-counts
   "Finds total count of all records with not-nul key satisfying function k."
-  [k]
-  (->> @db
-       vals
-       (filter k)
-       count))
+  [db k]
+  (reduce (fn [c _] (inc c)) 0 (r/filter k (vals db))))
+
 
