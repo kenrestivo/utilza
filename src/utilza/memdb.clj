@@ -41,3 +41,18 @@
      (reset! db (->> dbfilename slurp edn/read-string))))
 
 
+(defn update-record
+  "Returns a function to update the db by applying f to the record at id.
+   Suitable for use with swap!"
+  [id f]
+  (fn [db]
+    (update-in db [id] f)))
+
+
+(defn init []
+  (if (< 0 (count @db))
+    (log/warn "Cowardly refusing to load db, it looks like it's already loaded")
+    (do
+      (log/info "Loading db first." (:db-filename env/env))
+      (read-data!)
+      (log/info "DB loaded (presumably)"))))
