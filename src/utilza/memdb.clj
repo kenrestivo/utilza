@@ -50,7 +50,7 @@
     (update-in db [id] f)))
 
 
-(defn init []
+(defn load []
   (if (< 0 (count @db))
     (log/warn "Cowardly refusing to load db, it looks like it's already loaded")
     (do
