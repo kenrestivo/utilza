@@ -9,6 +9,7 @@
   
   (:import java.io.File)
   (:require [clojure.edn :as edn]
+            [taoensso.timbre :as log]
             [environ.core :as env]))
 
 
