@@ -80,3 +80,11 @@
   (reduce (fn [c _] (inc c)) 0 (r/filter k (vals db))))
 
 
+(defn simple-contains
+  [db k s]
+  (->> (reduce #(conj %1 %2)
+               []
+               (->> db
+                    vals
+                    (r/filter #(some-> % k (.contains s)))))
+       (sort-by :time)))
