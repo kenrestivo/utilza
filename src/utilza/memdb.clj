@@ -29,6 +29,7 @@
        (let [tmpfile (str dbfilename ".tmp")]
          (send-off save-agent
                    (fn [_]
+                     (log/info "saving db " dbfilename)
                      (spit tmpfile (prn-str @db))
                      (.renameTo (File. tmpfile) (File. dbfilename))))))))
 
