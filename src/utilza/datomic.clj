@@ -2,7 +2,7 @@
 
 (ns utilza.datomic
   (:require [datomic.api :as d]
-            [clojure.tools.logging :as log]
+            [1clojure.tools.logging :as log]
             [utilza.core :as cora])
   (:import datomic.Util))
 
@@ -227,6 +227,9 @@
     (let [child (k m)
           cycle-detected? (some #(= % (:db/id child)) (map :db/id result))]
       (when cycle-detected?
+        ;; XXX Yuck for having a log dependency in here,
+        ;; but I don't want to throw an error, since the whole point is to strip
+        ;; cycles to the incoming entity cycle-safe, not to just detect them and throw.
         (log/error (apply format "Cycle detected! orig map: %s, map %s, child %s, accumulator %s "
                           (map pr-str [e m child result]))))
       (if (or (nil? child) cycle-detected?)
