@@ -24,3 +24,15 @@
       org.joda.time.DateTime.
       coerce/to-long
       (jgen/encode-long jg)))
+
+(defn json-response
+  "Takes some clojure data, encodes it as JSON, wraps it in a ring response,
+  adds the right header, and returns it."
+  [data]
+  {:status 200
+   :headers {"Content-Type" "application/json;charset=UTF-8"
+             ;; TODO: yeah, OK, maybe ETags might be useful in the future.
+             "Pragma" "no-cache"
+             "Expires" "Wed, 11 Jan 1984 05:00:00 GMT"
+             "Cache-Control" "private, no-cache, no-store"}
+   :body (json/encode data true)})
