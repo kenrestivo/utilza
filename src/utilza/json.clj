@@ -22,8 +22,17 @@
   [c jg]
   (-> c
       org.joda.time.DateTime.
+      ;; TODO; use simpler-serialize date, adn eliminate dependncy on clj-time.coerce
       coerce/to-long
       (jgen/encode-long jg)))
+
+
+(defn simpler-serialize-date
+  [c jg]
+  (-> c
+      .getTime
+      (jgen/encode-long jg)))
+
 
 (defn json-response
   "Takes some clojure data, encodes it as JSON, wraps it in a ring response,
