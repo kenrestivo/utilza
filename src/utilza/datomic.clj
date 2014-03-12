@@ -2,7 +2,7 @@
 
 (ns utilza.datomic
   (:require [datomic.api :as d]
-            [1clojure.tools.logging :as log]
+            [clojure.tools.logging :as log]
             [utilza.core :as cora])
   (:import datomic.Util))
 
