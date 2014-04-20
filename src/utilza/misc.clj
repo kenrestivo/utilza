@@ -137,3 +137,9 @@
                            []
                            vs))))
 
+(defn force-into
+  "Stuffs result of (f y xs) into empty collection of same type as xs.
+   Used in swap!, with f's like map, filter, etc, and y's of assoc-in, get-in, etc."
+  [xs f y]
+  (into (empty xs)
+        (f y xs)))
