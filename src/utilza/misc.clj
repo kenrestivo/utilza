@@ -137,9 +137,10 @@
                            []
                            vs))))
 
-(defn force-into
-  "Stuffs result of (f y xs) into empty collection of same type as xs.
-   Used in swap!, with f's like map, filter, etc, and y's of assoc-in, get-in, etc."
-  [xs f y]
+
+(defn foobar
+  "I don't even know how to describe this, except that you'd use it like:
+  (swap! some-atom foobar map assoc-in  [:x] y)"
+  [xs coll-f inner-f & args]
   (into (empty xs)
-        (f y xs)))
+        (coll-f #(apply inner-f % args) xs)))
