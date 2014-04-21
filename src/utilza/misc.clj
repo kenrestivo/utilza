@@ -137,10 +137,12 @@
                            []
                            vs))))
 
-
+;; NOTE: similar to  clojure.walk/walk , says Alan.
+;; Maybe replace with walk?
 (defn foobar
   "I don't even know how to describe this, except that you'd use it like:
   (swap! some-atom foobar map assoc-in  [:x] y)"
   [xs coll-f inner-f & args]
   (into (empty xs)
         (coll-f #(apply inner-f % args) xs)))
+
