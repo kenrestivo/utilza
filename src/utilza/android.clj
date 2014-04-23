@@ -4,6 +4,7 @@
            android.os.HandlerThread
            android.content.ComponentName
            android.content.pm.PackageInfo
+           android.net.Uri
            android.content.Intent))
 
 (defn periodic
@@ -36,7 +37,16 @@
   "Returns a map of :version-name and :version-number for given package-name"
   [^String package-name]
   (let [^PackageInfo pi (-> context/context
-               .getPackageManager
-               (.getPackageInfo package-name 0))]
+                            .getPackageManager
+                            (.getPackageInfo package-name 0))]
     {:version-name (.versionName pi)
      :version-number (.versionCode pi)}))
+
+(defn safe-url
+  [^String s]
+  (let [u (Uri/parse s)]
+    (if (.getScheme u)
+      u
+      (recur (str "http://" s)))))
+;; TODO: test
+;;   (mapv safe-url ["www.google.com" "http://www.google.com" "bitcoin://1asidfuio2io1"])

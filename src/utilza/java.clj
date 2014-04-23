@@ -83,3 +83,18 @@
   [filename bytes]
   (with-open [w (clojure.java.io/output-stream filename)]
     (.write w bytes)))
+
+
+(defn invoke-private-method
+  "Copy/pasted from https://groups.google.com/forum/#!topic/clojure/6iPNEbe9iZk
+   and then refactored because I like pointy things"
+  [obj fn-name & args]
+  (-> obj
+      .getClass
+      .getDeclaredMethods
+      (as-> x (filter #(->  % .getName (.equals fn-name)) x))
+      first
+      (.setAccessible true) ;; mutation!
+      (as-> m (.invoke obj m args))))
+
+
