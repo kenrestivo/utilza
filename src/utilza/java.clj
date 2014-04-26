@@ -1,9 +1,8 @@
-;;; misc wrappers around commonly-used java functions
-
 (ns utilza.java
+  "Misc wrappers around commonly-used java functions. NS is clean for inclusion in Android too."
   (:import (java.text SimpleDateFormat)
-           java.util.Date
-           org.joda.time.DateTime))
+           java.util.Date))
+           
 
 
 
@@ -71,11 +70,6 @@
       (.replace "\"" "")))
 
 
-(defn date-range
-  "Generates lazy seq of range of dates incremented by 1 day"
-  [start end]
-  (take-while #(or (.isBefore %  end) (= % end))
-              (iterate #(.plusDays % 1) (DateTime. start))))
 
 (defn spit-bytes
   "Saves an array of bytes to filename. Has same shape as spit, but not same options.
