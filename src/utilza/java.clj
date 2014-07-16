@@ -97,3 +97,14 @@
   [in out]
   (with-open [w (clojure.java.io/output-stream out)]
     (.write w in)))
+
+(defn get-project-properties
+  "Give it the groupid and artifactid of a project and it returns a clojure map of its
+   version and git revision id"
+  [group-id artifact-id]
+  (->> (doto (java.util.Properties.)
+         (.load (clojure.java.io/reader
+                 (clojure.java.io/resource 
+                  (str "META-INF/maven/" group-id "/" artifact-id "/pom.properties")))))
+       (into {})
+       clojure.walk/keywordize-keys))
