@@ -2,7 +2,7 @@
   "Misc wrappers around commonly-used java functions. NS is clean for inclusion in Android too."
   (:import (java.text SimpleDateFormat)
            java.util.Date))
-           
+
 
 
 
@@ -92,3 +92,8 @@
       (as-> m (.invoke obj m args))))
 
 
+(defn write-file!
+  "Convenience function. Takes input stream, and output filename, and does the deed."
+  [in out]
+  (with-open [w (clojure.java.io/output-stream out)]
+    (.write w in)))
