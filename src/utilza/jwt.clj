@@ -6,7 +6,7 @@
 
 
 
-(defn decode-jwt
+(defn decode
   [s]
   (->> s
        (JsonWebSignature/parse (JacksonFactory.))
