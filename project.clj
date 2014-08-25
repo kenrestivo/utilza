@@ -17,6 +17,8 @@
                      [com.datomic/datomic-free "0.8.4007"]
                      [com.google.zxing/core "2.1"]
                      [com.google.zxing/javase "2.1"]
+                     [com.google.http-client/google-http-client "1.15.0-rc"]
+                     [com.google.http-client/google-http-client-jackson "1.15.0-rc"] 
                      [commons-codec/commons-codec "1.8"]
                      [c3p0/c3p0 "0.9.1.2"]
                      [honeysql "0.3.0"]
