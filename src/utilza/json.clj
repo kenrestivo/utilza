@@ -9,6 +9,11 @@
            org.joda.time.DateTime))
 
 
+(defn decode
+  "Convenience function so I don't have to (#(decode % true)) in ->> chains"
+  [s]
+  (json/decode s true))
+
 (defn massive-json->edn
   "Convert a massive JSON tree into pretty-printed readable EDN"
   [json-file-name edn-file-name]
@@ -45,3 +50,5 @@
              "Expires" "Wed, 11 Jan 1984 05:00:00 GMT"
              "Cache-Control" "private, no-cache, no-store"}
    :body (json/encode data true)})
+
+
