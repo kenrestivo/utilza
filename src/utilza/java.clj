@@ -108,3 +108,16 @@
                   (str "META-INF/maven/" group-id "/" artifact-id "/pom.properties")))))
        (into {})
        clojure.walk/keywordize-keys))
+
+
+(defn seq->enumeration
+  "Turns a seq into an Enumeration, i.e. for SequenceInputStream or similar.
+   Thanks to clgv"
+  [^java.lang.Iterable xs]
+  (let [it (.iterator xs)]
+    (reify
+      java.util.Enumeration
+      (hasMoreElements [_]
+        (.hasNext it))
+      (nextElement [_]
+        (.next it)))))
