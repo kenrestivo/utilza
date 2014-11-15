@@ -1,15 +1,15 @@
 (ns utilza.rotary)
 
-;; Utility functions for dealing with rotary encoders
+;; Utility functions for dealing with rotary encodersg
 
-(def rotary-phases {[0 0] {:prev [1 0]
-                           :next [0 1]}
-                    [0 1] {:prev [0 0]
-                           :next [1 1]}
-                    [1 1] {:prev [0 1]
-                           :next [1 0]}
-                    [1 0] {:prev [1 1]
-                           :next [0 0]}})
+(def rotary-phases {[false false] {:prev [true false]
+                                   :next [false true]}
+                    [false true] {:prev [false false]
+                                  :next [true true]}
+                    [true true] {:prev [false true]
+                                 :next [true false]}
+                    [true false] {:prev [true true]
+                                  :next [false false]}})
 
 (defn rotary-dir
   "Takes vectors of bits, for prev and current position.
