@@ -4,12 +4,12 @@
 
 (def rotary-phases {[false false] {:prev [true false]
                                    :next [false true]}
-                    [false true] {:prev [false false]
-                                  :next [true true]}
-                    [true true] {:prev [false true]
-                                 :next [true false]}
-                    [true false] {:prev [true true]
-                                  :next [false false]}})
+                    [false true]  {:prev [false false]
+                                   :next [true true]}
+                    [true true]   {:prev [false true]
+                                   :next [true false]}
+                    [true false]  {:prev [true true]
+                                   :next [false false]}})
 
 (defn rotary-dir
   "Takes vectors of bits, for prev and current position.

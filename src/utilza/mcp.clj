@@ -93,9 +93,9 @@
 
 
 (defn bit-subset
-  "Takes vector of booleans, and a seq of bit indexes.
+  "Takes a seq of bit indexes, and a vector of booleans.
     Returns a vector with the bits"
-  [bs pins]
+  [pins bs]
   (vals (select-keys (vec (reverse bs)) pins)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
