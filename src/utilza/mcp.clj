@@ -58,7 +58,6 @@
                    :olatb	0x1a
                    }})
 
-
 (defn wordify
   "Takes a keyword. Returns a pair of the keyword with and b appended.
    Used for converting :iodir to [:iodira :iodirb]"
@@ -66,8 +65,9 @@
   (for [s ["a" "b"]]
     (keyword (str (name kw) s))))
 
-(def bits (apply g/bit-seq (repeat 8 1))) 
 
+(def bits {:mcp08 (apply g/bit-seq (repeat 8 1))
+           :mcp17 (apply g/bit-seq (repeat 16 1))})
 
 (defn open-bus
   [id]
@@ -79,8 +79,8 @@
       (throw (Exception. (jna/invoke String c/strerror (Native/getLastError)))))))
 
 (defn close-bus
-  [id]
-  (libc/close id))
+  [fd]
+  (libc/close fd))
 
 (defn set-address!
   [fd addr]
@@ -93,27 +93,44 @@
   "Takes an integer fd, and a keyword with the name of the register,
    reads the register, and returns the value as a byte"
   [fd dev-type reg]
-  ;; TODO: handle 16-bit
-  (jna/invoke Integer smbus/smbus_read_byte_data (int fd) (-> regs dev-type reg byte)))
+  ;; TODO: do the case dispatch after invoke
+  (case dev-type
+    :mcp08 (jna/invoke Integer smbus/smbus_read_byte_data (int fd) (-> regs dev-type reg unchecked-byte))
+    :mcp17 (jna/invoke Integer smbus/smbus_read_word_data (int fd) (-> regs dev-type reg unchecked-byte))
+    (throw (Exception. (str "incorrect type" dev-type)))))
 
+
+
+(defn reg-value->bit-seq
+  "Takes a register value x and a device type.
+   Return a sequence of bits representing the register's value"
+  [x dev-type]
+  (mapv #(if % 1 0)
+        (gio/decode (get bits dev-type) (->> x
+                                             vector
+                                             ;; TODO: handle 16bit by padding with 0's
+                                             byte-array))))
 (defn read-decode-reg
   [fd dev-type reg]
-  ;; TODO: handl 16-bit
-  (gio/decode bits (->> reg
-                        (read-reg fd dev-type)
-                        vector
-                        byte-array)))
+  (reg-value->bit-seq (read-reg fd dev-type reg) dev-type))
+
 
 (defn write-reg!
   [fd dev-type reg b]
-  ;; TODO: handle 16-bit
-  (jna/invoke Integer smbus/smbus_write_byte_data (int fd) (-> regs dev-type reg byte) b))
+  (case dev-type
+    :mcp08 (jna/invoke Integer smbus/smbus_write_byte_data (int fd)
+                       (-> regs dev-type reg unchecked-byte)
+                       (-> b (bit-and 0xff) unchecked-byte))
+    :mcp17 (jna/invoke Integer smbus/smbus_write_word_data (int fd)
+                       (-> regs dev-type reg unchecked-byte)
+                       ;; TODO: doublecheck that it doesn't need to be masked and that the int cast is OK
+                       (int b))
+    (throw (Exception. (str "incorrect type" dev-type)))))
 
 
 (defn write-encode-reg!
   [fd dev-type reg bitseq]
-  ;; TODO: handle 16-bit
-  (write-reg! fd dev-type reg  (.get (gio/contiguous (gio/encode bits bitseq)))))
+  (write-reg! fd dev-type reg  (.get (gio/contiguous (gio/encode (get bits dev-type) bitseq)))))
 
 
 
@@ -131,18 +148,19 @@
   "Takes a vector of previous pin states (1 or 0), and a vector of current pin states.
    Returns a map of bit numbers as keys, and state :rising :falling"
   [prev cur]
-  (into {} (filter second (map-indexed vector (reverse (map (fn [p c]
-                                                              (condp #(%1 (apply - %2)) [c p]
-                                                                pos? :rising
-                                                                neg? :falling
-                                                                = false))
-                                                            prev cur))))))
+  (when (and prev cur) ;; remove nils
+    (into {} (filter second (map-indexed vector (reverse (map (fn [p c]
+                                                                (condp #(%1 (apply - %2)) [c p]
+                                                                  pos? :rising
+                                                                  neg? :falling
+                                                                  = false))
+                                                              prev cur)))))))
 
 (defn bit-subset
-  "Takes vector of booleans, and a seq of bit indexes.
-    Returns a vector with the bits"
-  [pins bs]
-  (reverse (vals (select-keys (vec (reverse bs)) pins))))
+  "Takes a seq of bit indexes, and a vector of bits representing a register value.
+    Returns a vector with only the selected bits, in order of the bit indexes presented"
+  [selected-bit-positions bit-values]
+  (reverse (vals (select-keys (vec (reverse bit-values)) selected-bit-positions))))
 
 
 (defn bitpos-to-bytes
@@ -150,26 +168,36 @@
   (* 8 (Math/ceil (double (/ (+ (apply max bit-positions) 1) 8)))))
 
 (defn bitpos-to-bitmap
-  "Takes a seq of bit-positions i.e. [2 3 7 11] and converts
+  "Takes a collection of bit-positions i.e. [2 3 7 11] and converts
    it to a bitmap seq of bits. Calculates size of bitmap from the maximum of bit-positions"
   ([bit-positions]
      (bitpos-to-bitmap bit-positions (bitpos-to-bytes bit-positions)))
-
   ([bit-positions size]
      (reverse (reduce #(assoc %1 %2 1) (vec (repeat size 0)) bit-positions))))
 
 
+(defn set-pin
+  "Sets bit bit-num in bit-seq to value.
+  bit-seq bits are numbered right to left."
+  [bit-seq bit-num value]
+  {:pre [(not (nil? bit-seq))
+         (<= bit-num (count bit-seq))]}
+  (log/trace "set-pin" bit-seq bit-num value)
+  (reverse (assoc (vec (reverse bit-seq)) bit-num value)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(comment
 
 
-  (def i2c (open-bus 1))
-  (set-address! i2c 0x20)
+(defn bitpos-to-num
+  "Takes collection of set bit positions,
+   returns a long with those bits set"
+  [bit-positions]
+  (reduce #(bit-set %1 %2) 0 bit-positions))
 
-  (write-encode-reg! i2c :mcp08 :gpio [0 0 0 0 1 1 1 1])
-  
-  (close-bus i2c)
 
-  
-  )
+(defn changed-bits
+  [prev cur input-mask dev-type]
+  (apply changed-pins (for [r [prev cur]]
+                        (-> r
+                            (bit-and input-mask)
+                            (reg-value->bit-seq dev-type)))))
+
