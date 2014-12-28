@@ -153,3 +153,9 @@
   (into (empty xs)
         (coll-f #(apply inner-f % args) xs)))
 
+(defn unique-values
+  "Takes a map. Returns true if the values are unique
+   (i.e. safe to be used as keys by clojure.set/invert-map)"
+  [m]
+  (let [vs (vals m)]
+    (= (distinct vs) vs)))
