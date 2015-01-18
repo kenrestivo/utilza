@@ -1,8 +1,5 @@
 (ns utilza.mcp
   (:require [net.n01se.clojure-jna :as jna]
-            [gloss.core :as g]
-            [gloss.io :as gio]
-            [gloss.core.formats :as fmt]
             [taoensso.timbre :as log])
   (:import (com.sun.jna Native Library)))
 
@@ -53,9 +50,6 @@
   (for [s ["a" "b"]]
     (keyword (str (name kw) s))))
 
-
-(def bits {:mcp08 (apply g/bit-seq (repeat 8 1))
-           :mcp17 (apply g/bit-seq (repeat 16 1))})
 
 (defn open-bus
   [id]
@@ -114,12 +108,6 @@
                        (-> regs dev-type reg unchecked-byte)
                        (-> b (bit-and 0xffff) unchecked-short))
     (throw (Exception. (str "incorrect type" dev-type)))))
-
-
-(defn write-encode-reg!
-  [fd dev-type reg bitseq]
-  (write-reg! fd dev-type reg  (.get (gio/contiguous (gio/encode (get bits dev-type) bitseq)))))
-
 
 
 
