@@ -34,29 +34,17 @@
                    :gpio	0x09
                    :olat	0x0a}
 
-           :mcp17 {:iodira      0x00
-                   :ipola       0x01
-                   :gpintena	0x02
-                   :defvala	0x03
-                   :intcona	0x04
-                   :iocona	0x05
-                   :gppua	0x06
-                   :intfa	0x07
-                   :intcapa	0x08
-                   :gpioa	0x09
-                   :olata	0x0a
-                   :iodirb      0x10
-                   :ipolb       0x11
-                   :gpintenb	0x12
-                   :defvalb	0x13
-                   :intconb	0x14
-                   :ioconb	0x15
-                   :gppub	0x16
-                   :intfb	0x17
-                   :intcapb	0x18
-                   :gpiob	0x19
-                   :olatb	0x1a
-                   }})
+           :mcp17 {:iodir	0x00
+                   :ipol	0x02
+                   :gpinten	0x04
+                   :defval	0x06
+                   :intcon	0x08
+                   :iocon	0x0a
+                   :gppu	0x0c
+                   :intf	0x0e
+                   :intcap	0x10
+                   :gpio	0x12
+                   :olat	0x14}})
 
 (defn wordify
   "Takes a keyword. Returns a pair of the keyword with and b appended.
@@ -105,11 +93,12 @@
   "Takes a register value x and a device type.
    Return a sequence of bits representing the register's value"
   [x dev-type]
-  (mapv #(if % 1 0)
-        (gio/decode (get bits dev-type) (->> x
-                                             vector
-                                             ;; TODO: handle 16bit by padding with 0's
-                                             byte-array))))
+  (vec (reverse (for [i (range (case dev-type
+                                 :mcp08 8
+                                 :mcp17 16))]
+               (if (bit-test x i) 1 0)))))
+
+
 (defn read-decode-reg
   [fd dev-type reg]
   (reg-value->bit-seq (read-reg fd dev-type reg) dev-type))
@@ -123,8 +112,7 @@
                        (-> b (bit-and 0xff) unchecked-byte))
     :mcp17 (jna/invoke Integer smbus/smbus_write_word_data (int fd)
                        (-> regs dev-type reg unchecked-byte)
-                       ;; TODO: doublecheck that it doesn't need to be masked and that the int cast is OK
-                       (int b))
+                       (-> b (bit-and 0xffff) unchecked-short))
     (throw (Exception. (str "incorrect type" dev-type)))))
 
 
