@@ -26,7 +26,7 @@
 (defn path-sep
   "Basically, basename: Separate a filepath,
    return a vector of [path, basename]"
-  [s separator]
+  [separator s]
   (let [all (.split s separator)]
     [(->> all butlast (interpose "/") (apply str))
      (->  all last)]))
