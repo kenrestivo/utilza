@@ -1,4 +1,4 @@
-(defproject utilza "0.1.64"
+(defproject utilza "0.1.65"
   :description "ken's random utilities"
   :url "https://github.com/kenrestivo/utilza"
   :license {:name "Eclipse Public License"

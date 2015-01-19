@@ -21,3 +21,12 @@
       (->> url
            slurp
            (spit cache)))))
+
+
+(defn path-sep
+  "Basically, basename: Separate a filepath,
+   return a vector of [path, basename]"
+  [s separator]
+  (let [all (.split s separator)]
+    [(->> all butlast (interpose "/") (apply str))
+     (->  all last)]))
