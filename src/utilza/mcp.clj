@@ -51,6 +51,8 @@
     (keyword (str (name kw) s))))
 
 
+
+
 (defn open-bus
   [id]
   (log/info "opening dev " id)
@@ -76,10 +78,18 @@
    reads the register, and returns the value as a byte"
   [fd dev-type reg]
   ;; TODO: do the case dispatch after invoke
-  (case dev-type
-    :mcp08 (jna/invoke Integer smbus/smbus_read_byte_data (int fd) (-> regs dev-type reg unchecked-byte))
-    :mcp17 (jna/invoke Integer smbus/smbus_read_word_data (int fd) (-> regs dev-type reg unchecked-byte))
-    (throw (Exception. (str "incorrect type" dev-type)))))
+  (let [ret (case dev-type
+              :mcp08 (jna/invoke Integer smbus/smbus_read_byte_data
+                                 (int fd)
+                                 (-> regs dev-type reg unchecked-byte))
+              :mcp17 (jna/invoke Integer smbus/smbus_read_word_data
+                                 (int fd)
+                                 (-> regs dev-type reg unchecked-byte))
+              (throw (Exception. (str "incorrect type" dev-type))))]
+    (if (> 0 ret)
+      (throw (format "i2c read error %d on fd %d dev %s register %s"
+                     ret fd dev-type reg))
+      ret)))
 
 
 
@@ -90,7 +100,7 @@
   (vec (reverse (for [i (range (case dev-type
                                  :mcp08 8
                                  :mcp17 16))]
-               (if (bit-test x i) 1 0)))))
+                  (if (bit-test x i) 1 0)))))
 
 
 (defn read-decode-reg
@@ -100,14 +110,22 @@
 
 (defn write-reg!
   [fd dev-type reg b]
-  (case dev-type
-    :mcp08 (jna/invoke Integer smbus/smbus_write_byte_data (int fd)
-                       (-> regs dev-type reg unchecked-byte)
-                       (-> b (bit-and 0xff) unchecked-byte))
-    :mcp17 (jna/invoke Integer smbus/smbus_write_word_data (int fd)
-                       (-> regs dev-type reg unchecked-byte)
-                       (-> b (bit-and 0xffff) unchecked-short))
-    (throw (Exception. (str "incorrect type" dev-type)))))
+  (let [ret (case dev-type
+              :mcp08 (jna/invoke Integer smbus/smbus_write_byte_data
+                                 (int fd)
+                                 (-> regs dev-type reg unchecked-byte)
+                                 (-> b (bit-and 0xff) unchecked-byte))
+              :mcp17 (jna/invoke Integer smbus/smbus_write_word_data
+                                 (int fd)
+                                 (-> regs dev-type reg unchecked-byte)
+                                 (-> b (bit-and 0xffff) unchecked-short))
+              (throw (Exception. (str "incorrect type" dev-type))))]
+    (if  (not= 0 ret)
+      (throw (Exception.
+              (format "i2c write error %d on fd %d dev %s register %s value 0x%x"
+                      ret fd dev-type reg b)))
+      ret)))
+
 
 
 
