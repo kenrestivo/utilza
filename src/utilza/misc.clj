@@ -159,3 +159,11 @@
   [m]
   (let [vs (vals m)]
     (= (distinct vs) vs)))
+
+(defn basename
+  "Strip the . suffix from a string s.
+   Doesn't matter what the suffix is (unilke unix basename)."
+  [s]
+  (if s
+    (st/join (butlast (st/split s  #"\.")))
+    ""))
