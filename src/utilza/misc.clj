@@ -165,5 +165,5 @@
    Doesn't matter what the suffix is (unilke unix basename)."
   [s]
   (if s
-    (string/join (butlast (st/split s  #"\.")))
+    (string/join (butlast (string/split s  #"\.")))
     ""))
