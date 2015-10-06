@@ -1,14 +1,13 @@
-(defproject utilza "0.1.66"
+(defproject utilza "0.1.67"
   :description "ken's random utilities"
   :url "https://github.com/kenrestivo/utilza"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.5.1"]
-                 [org.timmc/handy "1.5.0" :exclusions [org.clojure/clojure]]]
+                 [org.timmc/handy "1.7.0" :exclusions [org.clojure/clojure]]]
   :dev-dependencies [
                      [noir "1.3.0-beta7"]
                      [clj-http "0.4.1"]
-                     [org.timmc.handy "1.5.0"]
                      [com.ashafa/clutch "0.3.0"]
                      ;; postgres-related
                      [org.slf4j/slf4j-log4j12 "1.6.4"] ;; clown shoes
