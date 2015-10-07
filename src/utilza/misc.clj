@@ -167,3 +167,10 @@
   (if s
     (string/join (butlast (string/split s  #"\.")))
     ""))
+
+(defn escape-html
+  [text]
+  (clojure.string/escape text {"&"  "&amp;"
+                               "<"  "&lt;"
+                               ">"  "&gt;"
+                               "\"" "&quot;"}))
