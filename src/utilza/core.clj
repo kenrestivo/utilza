@@ -71,3 +71,10 @@
   (clojure.set/rename-keys map keymap))
 
 
+(defn mapify
+  "Takes a key and a seq of maps.
+   Returns a single map with the keys being item k of the original maps,
+   and the vals being the rest of the map minus that key"
+  [k ms]
+  (reduce (fn [acc m]
+            (assoc acc (k m) (dissoc m k))) {} ms))
