@@ -46,8 +46,8 @@
 
 
 (defn load []
-  (when (< 0 (count @db))
+  (if (< 0 (count @db))
     (log/warn "Cowardly refusing to load db, it looks like it's already loaded")
-    (log/info "Loading db first." (:db-filename env/env))
-    (read-data!)
-    (log/info "DB loaded (presumably)")))
+    (do (log/info "Loading db first." (:db-filename env/env))
+        (read-data!)
+        (log/info "DB loaded (presumably)"))))

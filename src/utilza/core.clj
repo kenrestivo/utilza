@@ -78,3 +78,9 @@
   [k ms]
   (reduce (fn [acc m]
             (assoc acc (k m) (dissoc m k))) {} ms))
+
+
+(defn xform-keys
+   "Takes a function f and applies it to all keys of map m"
+  [f m]
+   (zipmap (map f (keys m)) (vals m)))

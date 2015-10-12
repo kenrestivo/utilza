@@ -1,5 +1,5 @@
 (ns utilza.memdb.utils
-  (:require [clojure.core.reducers :as r)))
+  (:require [clojure.core.reducers :as r]))
 
 
 (defn update-record
