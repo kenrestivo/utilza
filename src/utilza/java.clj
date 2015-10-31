@@ -121,3 +121,11 @@
         (.hasNext it))
       (nextElement [_]
         (.next it)))))
+
+;; via https://stackoverflow.com/questions/23018870/how-to-read-a-whole-binary-file-nippy-into-byte-array-in-clojure
+(defn slurp-bytes
+  "Slurp the bytes from a slurpable thing."
+  [x]
+  (with-open [out (java.io.ByteArrayOutputStream.)]
+    (clojure.java.io/copy (clojure.java.io/input-stream x) out)
+    (.toByteArray out)))
