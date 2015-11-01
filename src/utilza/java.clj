@@ -129,3 +129,14 @@
   (with-open [out (java.io.ByteArrayOutputStream.)]
     (clojure.java.io/copy (clojure.java.io/input-stream x) out)
     (.toByteArray out)))
+
+
+(defn path-to-url
+  "Takes a file path as a string, returns a string URL path to that file
+   suitable for passing to something that java will cast as a URL"
+  [^String s]
+  (-> s
+      File.
+      .toURI
+      .toURL
+      .toString))
