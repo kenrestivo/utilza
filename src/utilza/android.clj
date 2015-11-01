@@ -1,5 +1,4 @@
 (ns utilza.android
-  (:require [neko.context :as context])
   (:import android.os.Handler
            android.os.HandlerThread
            android.content.ComponentName
@@ -25,8 +24,8 @@
 (defn start-activity
   "Starts a new activity. pkg-name is the package part of the component,
    activity-name is the non-package part of the name. i.e. [\"org.foobar.app\" \"SomeActivity\"]"
-  [^String pkg-name activity-name]
-  (.startActivity context/context
+  [^String pkg-name activity-name context]
+  (.startActivity context
                   (doto (Intent.)
                     (.setAction Intent/ACTION_MAIN)
                     (.addFlags Intent/FLAG_ACTIVITY_NEW_TASK)
@@ -35,8 +34,8 @@
 
 (defn get-version-info
   "Returns a map of :version-name and :version-number for given package-name"
-  [^String package-name]
-  (let [^PackageInfo pi (-> context/context
+  [^String package-name context]
+  (let [^PackageInfo pi (-> context
                             .getPackageManager
                             (.getPackageInfo package-name 0))]
     {:version-name (.versionName pi)
