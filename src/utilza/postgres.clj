@@ -3,6 +3,7 @@
             [clj-stacktrace.repl :as cst]
             [taoensso.timbre :as log]
             [utilza.core :as cora]
+            [clj-time.coerce :as coerce]
             [honeysql.core :as sql]
             [clojure.set :as set]))
 
