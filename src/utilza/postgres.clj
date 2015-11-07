@@ -4,15 +4,14 @@
             [taoensso.timbre :as log]
             [utilza.core :as cora]
             [honeysql.core :as sql]
-            [clojure.set :as set]
-            [clojure.java.jdbc.sql :as fail]
-            [clj-time.coerce :as coerce]))
+            [clojure.set :as set]))
 
 
 
 ;; This is kind of a very cheap wrapper for sql.
 ;; The mainly useful stuff in her is the spec/pool stuff.
 ;; The rest could be replaced by something like korma or similar.
+
 
 
 (defn spec
@@ -32,16 +31,15 @@
 
 
 (defn insert!
-  [table keymap m]
+  [db table keymap m]
   {:pre [(not (empty? m))]}
   (let [mk (utilza.core/modify-keys keymap m)]
     (try
-      (jdbc/insert! (db) table mk)
+      (jdbc/insert! db table mk)
       (catch Throwable e
-        (log/error (str (pr-str m) "\n"
-                        (with-out-str
-                          (jdbc/print-sql-exception-chain e)
-                          (cst/pst e))))
+        (log/error e (str (pr-str m) "\n"
+                          (with-out-str
+                            (jdbc/print-sql-exception-chain e))))
         (throw e)))))
 
 
@@ -54,15 +52,12 @@
 ;; TODO: use dire instead.
 ;; TODO: also (doto (Exception. (str etc)) (.setStackTrace (.getStacktrace e)))
 (defn query
-  [& args]
+  [db & args]
   {:pre [(coll? (first args))]} ;; safeguard that should be built into jdbc
   (try
-    (apply jdbc/query (cons (db) args))
+    (apply jdbc/query (cons db args))
     (catch Throwable e
-      (log/error (str (pr-str args) "\n"
-                      (with-out-str
-                        (jdbc/print-sql-exception-chain e)
-                        (cst/pst e))))
+      (log/error e (with-out-str (jdbc/print-sql-exception-chain e)))
       (throw e))))
 
 
@@ -82,22 +77,6 @@
 
 
 
-(defn jdbc-where
-  "Petulantly bury the jdbc DSL since I don't like it
-   but I can't use honeysql since it doesn't have insert/update yet"
-  [m]
-  (fail/where m))
-
-(defn update!
-  [tablename keymap where-map set-map]
-  (let [where-clause (->> where-map (utilza.core/modify-keys keymap) jdbc-where)
-        cleaned-set-map (utilza.core/modify-keys keymap set-map)]
-    (try
-      (jdbc/update! (db) tablename cleaned-set-map where-clause)
-      (catch java.sql.BatchUpdateException e
-        (log/error (str tablename cleaned-set-map where-clause) e)
-        (throw (-> e .getNextException))))))
-
 
 (defn get-one-id
   [table-name keymap key-id val]
@@ -109,19 +88,6 @@
        first
        (utilza.core/modify-keys (set/map-invert keymap))
        empty-as-nil))
-
-
-
-(defn update-or-insert
-  "Updates or inserts a thing"
-  [table-name keymap set-map where-map]
-  (let [record (utilza.core/modify-keys keymap set-map)
-        where-clause (->>  where-map (utilza.core/modify-keys keymap) jdbc-where)]
-    (jdbc/db-transaction [t-con (db)]
-                         (let [result (jdbc/update! t-con table-name record where-clause)]
-                           (if (zero? (first result))
-                             (jdbc/insert! t-con table-name record)
-                             result)))))
 
 
 
