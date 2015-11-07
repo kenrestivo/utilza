@@ -1,6 +1,7 @@
 (ns utilza.java
   "Misc wrappers around commonly-used java functions. NS is clean for inclusion in Android too."
   (:import (java.text SimpleDateFormat)
+           java.io.File
            java.util.Date))
 
 
