@@ -1,13 +1,13 @@
 (ns utilza.postgres
   (:require [clojure.java.jdbc :as jdbc]
             [clj-stacktrace.repl :as cst]
-            [utilza.log :as log]
+            [taoensso.timbre :as log]
             [utilza.core :as cora]
             [honeysql.core :as sql]
             [clojure.set :as set]
             [clojure.java.jdbc.sql :as fail]
-            [clj-time.coerce :as coerce])
-  (:import (com.mchange.v2.c3p0 ComboPooledDataSource)))
+            [clj-time.coerce :as coerce]))
+
 
 
 ;; This is kind of a very cheap wrapper for sql.
@@ -24,23 +24,6 @@
      :subname (str "//" db-host ":" db-port "/" db-name )
      :user db-user 
      :password db-pass}))
-
-
-
-;; ripped from the pages of the jdbc docs
-;; added destructuring because it's 2013 now.
-(defn pool
-  [spec]
-  (let [{:keys [subprotocol classname subname user password]} spec]
-    {:datasource (doto (ComboPooledDataSource.)
-                   (.setDriverClass classname) 
-                   (.setJdbcUrl (str "jdbc:" subprotocol ":" subname))
-                   (.setUser user)
-                   (.setPassword password)
-                   ;; expire excess connections after 30 minutes of inactivity:
-                   (.setMaxIdleTimeExcessConnections (* 30 60))
-                   ;; expire connections after 3 hours of inactivity:
-                   (.setMaxIdleTime (* 3 60 60)))}))
 
 
 
@@ -160,17 +143,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (comment
-  ;; to use this, in your project, do:
 
-  (defonce db-pool (delay (utilza.postgres/pool (utilza.postgres/spec env/env))))
-
-  (defn db
-    "This is intended to be the public interface to the database"
-    []
-    @db-pool)
-
-  ;;; the keys required in your env are:
-  [db-host db-port db-name db-user db-pass]
 
   
   )

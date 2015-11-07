@@ -12,7 +12,7 @@
                      ;; postgres-related
                      [org.slf4j/slf4j-log4j12 "1.6.4"] ;; clown shoes
                      [postgresql "9.1-901-1.jdbc4"]
-                     [org.clojure/java.jdbc "0.3.0-alpha1"]
+                     [org.clojure/java.jdbc "0.4.2"]
                      [com.datomic/datomic-free "0.8.4007"]
                      [com.google.zxing/core "2.1"]
                      [com.google.zxing/javase "2.1"]
