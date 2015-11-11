@@ -141,3 +141,10 @@
       .toURI
       .toURL
       .toString))
+
+
+(defn revision-info
+  "Utility for determing the program's revision."
+  [group-id artifact-id]
+  (let [{:keys [version revision]} (get-project-properties group-id artifact-id)]
+    (format "Version: %s, Revision %s" version revision)))
