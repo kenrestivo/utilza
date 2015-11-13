@@ -13,6 +13,11 @@
   {(s/required-key :filename) s/Str
    (s/required-key :autosave-timeout) s/Int})
 
+(defn freeze
+  [data filename]
+  (-> data
+      nippy/freeze
+      (clojure.java.io/copy (java.io.File. filename))))
 
 (defn save-data!
   "Takes settings map and db-internal map"
@@ -22,9 +27,7 @@
     (send-off db-agent
               (fn [data]
                 (log/info "saving db " filename)
-                (-> data
-                    nippy/freeze
-                    (clojure.java.io/copy (java.io.File. tmpfile)))
+                (freeze data tmpfile)
                 (.renameTo (File. tmpfile) (File. filename))))))
 
 
@@ -66,9 +69,13 @@
 
 (defn read-data*
   [path]
-  ;; TODO: try/catch for missing file, create it if missing and retry
-  ;; and throw if it can't be created/read/written
-  (some-> path ujava/slurp-bytes nippy/thaw))
+  (letfn [(load-db [path]  (some-> path ujava/slurp-bytes nippy/thaw))]
+    (try 
+      (load-db path)
+      (catch Exception e
+        (log/warn e)
+        (freeze {} path)
+        (load-db path)))))
 
 
 
