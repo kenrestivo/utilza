@@ -1,10 +1,17 @@
 (ns utilza.memdb
   (:require [clojure.core.async :as async]
+            [taoensso.nippy :as nippy]
             [clojure.edn :as edn]
+            [utilza.java :as ujava]
+            [schema.core :as s]
             [com.stuartsierra.component :as component]
             [taoensso.timbre :as log])
   (:import (java.io File)))
 
+
+(def MemdbSettings
+  {(s/required-key :filename) s/Str
+   (s/required-key :autosave-timeout) s/Int})
 
 
 (defn save-data!
@@ -16,7 +23,9 @@
       (send-off db-agent
                 (fn [data]
                   (log/info "saving db " filename)
-                  (spit tmpfile (prn-str data))
+                  (-> data
+                      nippy/freeze
+                      (clojure.java.io/copy (java.io.File. tmpfile)))
                   (.renameTo (File. tmpfile) (File. filename)))))))
 
 
@@ -58,8 +67,10 @@
 
 (defn read-data*
   [path]
-  ;; TODO: try/catch for missing file, create it if missing, and throw if it can't be created/read/written
-    (some-> path slurp edn/read-string))
+  ;; TODO: try/catch for missing file, create it if missing and retry
+  ;; and throw if it can't be created/read/written
+  (some-> path ujava/slurp-bytes nippy/thaw))
+
 
 
 (defn read-data
