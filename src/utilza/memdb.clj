@@ -18,15 +18,14 @@
   "Takes settings map and db-internal map"
   [{{:keys [filename]} :settings
     db-agent :db-agent}]
-  (binding [*print-length* 10000000 *print-level* 10000000]
-    (let [tmpfile (str filename ".tmp")]
-      (send-off db-agent
-                (fn [data]
-                  (log/info "saving db " filename)
-                  (-> data
-                      nippy/freeze
-                      (clojure.java.io/copy (java.io.File. tmpfile)))
-                  (.renameTo (File. tmpfile) (File. filename)))))))
+  (let [tmpfile (str filename ".tmp")]
+    (send-off db-agent
+              (fn [data]
+                (log/info "saving db " filename)
+                (-> data
+                    nippy/freeze
+                    (clojure.java.io/copy (java.io.File. tmpfile)))
+                (.renameTo (File. tmpfile) (File. filename))))))
 
 
 
