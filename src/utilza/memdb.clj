@@ -131,10 +131,10 @@
   component/Lifecycle
   (start
     [this]
-    (log/info "starting memdb " (:settings this))
     (if (and cmd-ch db-agent)
       this 
       (try
+        (log/info "starting memdb " (s/validate MemdbSettings (:settings this)))
         (-> this
             start-memdb
             start-command-loop
@@ -157,8 +157,8 @@
             (assoc  :db-agent nil))))))
 
 
-(defn create-memdb
-  [settings]
+(s/defn create-memdb
+  [settings :- MemdbSettings]
   (log/info "memdb " settings)
   ;; TODO: verify all the settings are there and correct
   (component/using
