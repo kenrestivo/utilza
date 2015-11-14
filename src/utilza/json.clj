@@ -52,3 +52,8 @@
    :body (json/encode data true)})
 
 
+(defn slurp-json
+  [f]
+  (-> f
+      slurp
+      (json/decode true)))
