@@ -9,6 +9,16 @@
         :when (->> f .getName (re-find re)  boolean)]
     (.getName f)))
 
+
+(defn directory-names
+  "Returns seq of subdirectories"
+  [directory-name]
+  (for [f (->> directory-name File. .listFiles)
+        :when (->> f .isDirectory  boolean)]
+    (.getName f)))
+
+
+
 (defn assure-cache
   "Nice to have local versions of js files when on flaky network connections.
    Used for example in keeping cached CDN js files around."
