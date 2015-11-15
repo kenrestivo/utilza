@@ -35,8 +35,7 @@
                 (freeze data tmpfile)
                 (.renameTo (File. tmpfile) (File. filename))))))
 
-
-
+;; TODO: combine autosave and command loops. There's no need for two separate channels.
 
 (defn start-command-loop
   [this]
