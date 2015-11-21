@@ -174,3 +174,14 @@
                                "<"  "&lt;"
                                ">"  "&gt;"
                                "\"" "&quot;"}))
+
+
+(defn redact
+  "Takes a map and a key.
+   Walks the map, if the key is anywhere in there, redacts it.
+   Used for hiding passwords in log files."
+  [m k]
+  (walk/postwalk  #(if (and (map? %) (k %))
+                     (assoc % k "[REDACTED]")
+                     %)
+                  m))
