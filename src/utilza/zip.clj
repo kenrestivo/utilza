@@ -1,6 +1,5 @@
 (ns utilza.zip
-  (:require [clojure.zip :as z])
-  (:use [clojure.core.incubator :only [-?>]]))
+  (:require [clojure.zip :as z]))
 
 
 (defn map-vals
@@ -66,8 +65,7 @@
     (fn [loc]
       (cond  (not (z/branch? loc))
              (z/insert-left loc (if (-> loc z/up z/rights) :li :li.last))
-             ;; TODO: replace the (and) with the -?> macro from incubator
-             (-?> loc z/down z/down z/branch? not)
+             (some-> loc z/down z/down z/branch? not)
              (z/insert-left (z/down loc) :ul)
              :else loc))
     zcat)])
