@@ -81,6 +81,12 @@
 
 
 (defn xform-keys
-   "Takes a function f and applies it to all keys of map m"
+  "Takes a function f and applies it to all keys of map m"
   [f m]
-   (zipmap (map f (keys m)) (vals m)))
+  (zipmap (map f (keys m)) (vals m)))
+
+
+(defn map-vals
+  "Takes a map and applies f to all vals of it"
+  [m f]
+  (into {} (for [[k v] m] [k (f v)])))
