@@ -91,13 +91,14 @@
   [f m]
   (into {} (for [[k v] m] [k (f v)])))
 
+
 (defn dissoc-vector
   "Given vector v and a seq of positions to dissoc from it,
      returns a vector with those positions removed"
-  [v pos-to-remove]
+  [v ks]
   (->>  v
         (map-indexed vector)
         (into (sorted-map))
-        (#(apply dissoc %  pos-to-remove))
+        (#(apply dissoc %  ks))
         vals
         vec))
