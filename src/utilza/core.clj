@@ -102,3 +102,21 @@
         (#(apply dissoc %  ks))
         vals
         vec))
+
+
+
+(defn multify
+"Takes a fn that takes 3 args, a map, k, and val,
+  and returns a fn that calls fn and accepts k v, or k v k v kv
+  Lifted from clojure.core assoc"
+  [f]
+  (fn
+    ([map key val] (f map key val))
+    ([map key val & kvs]
+       (let [ret (f map key val)]
+         (if kvs
+           (if (next kvs)
+             (recur ret (first kvs) (second kvs) (nnext kvs))
+             (throw (IllegalArgumentException.
+                     "expects even number of arguments after map/vector, found odd number")))
+           ret)))))
