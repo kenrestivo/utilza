@@ -192,3 +192,8 @@
   [am bm]
   (apply disj (-> bm keys set) (keys am)))
 
+
+(defn split-seq 
+  "Generates a list of from-to steps between 0 and max, by step"
+  [step max] 
+  (partition 2 1 (concat (range 0 max step) [max])))
