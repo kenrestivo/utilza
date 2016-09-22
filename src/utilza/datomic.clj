@@ -2,7 +2,7 @@
 
 (ns utilza.datomic
   (:require [datomic.api :as d]
-            [clojure.tools.logging :as log]
+            [taoensso.timbre :as log]
             [utilza.core :as cora])
   (:import datomic.Util))
 
