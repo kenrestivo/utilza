@@ -1,6 +1,7 @@
 (ns utilza.misc
   (:require 
    [clojure.string :as string]
+   [clojure.set :as set]
    [clojure.walk :as walk]))
 
 ;;; file system stuff
@@ -187,6 +188,24 @@
                      %)
                   m))
 
+
+(defn redact-keys
+  "Takes a map and a coll of keys.
+   Walks the map, if the key is anywhere in there, redacts it.
+   Used for hiding passwords in log files."
+  [m ks]
+  (walk/postwalk  (fn [m]
+                    (if (map? m)
+                      (if-let [k (->> m
+                                      keys
+                                      set
+                                      (set/intersection (set ks))
+                                      first)]
+                        (assoc m k "[REDACTED]")
+                        m)
+                      m))
+                  m))
+
 (defn changed-keys
   "Returns a set of keys in map bm that are not present in map am"
   [am bm]
@@ -197,3 +216,20 @@
   "Generates a list of from-to steps between 0 and max, by step"
   [step max] 
   (partition 2 1 (concat (range 0 max step) [max])))
+
+
+(defn dissocs
+  "dissoc k from coll of maps ms"
+  [k ms]
+  (map #(dissoc % k) ms))
+
+
+(defn groupify
+  "Takes k and coll of maps ms. 
+   Groups the maps by k into a map of maps, and dissocs k from the maps."
+  [k ms]
+  (into {}
+        (for [[kv vs] (group-by k ms)]
+          [kv (dissocs k vs)])))
+
+

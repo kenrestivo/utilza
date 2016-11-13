@@ -14,12 +14,13 @@
   PLEASE don't make me read javadooc!"
   [c]
   ;; optimization by amalloy
-  (->
-   (map :name
-        (remove (comp :private :flags)
-                (:members (clojure.reflect/reflect c))))
-   sort
-   clojure.pprint/pprint))
+  (->> c
+       clojure.reflect/reflect 
+       :members 
+       (remove (comp :private :flags))
+       (map :name)
+       sort
+       clojure.pprint/pprint))
 
 
 (defn hjall [o]
@@ -29,19 +30,19 @@
   "get the details on  methods/members. "
   ([obj] (jmethods obj ""))
   ([obj srch]
-     (filter #(.contains (str (:name %)) srch)
-             (:members (clojure.reflect/reflect obj)))))
+   (filter #(.contains (str (:name %)) srch)
+           (:members (clojure.reflect/reflect obj)))))
 
 
 (defn methods-pub 
   "get names and arities/args on public members/methods"
   ([obj] (methods-pub obj ""))
   ([obj srch]
-     (map (juxt :name :parameter-types)
-          (filter #(and
-                    (.contains (str (:name %)) srch)      
-                    ((comp :public :flags) %))
-                  (:members (clojure.reflect/reflect obj))))))
+   (map (juxt :name :parameter-types)
+        (filter #(and
+                  (.contains (str (:name %)) srch)      
+                  ((comp :public :flags) %))
+                (:members (clojure.reflect/reflect obj))))))
 
 
 
@@ -104,10 +105,10 @@
 ;; i use this all the time
 (defn reloadns
   ([]
-     (reloadns (symbol (.getName *ns*)) :reload))
+   (reloadns (symbol (.getName *ns*)) :reload))
   ([tns & all]
-     (let [flag (if all :reload-all :reload)]
-       (require tns flag))))
+   (let [flag (if all :reload-all :reload)]
+     (require tns flag))))
 
 (defn reload-enter
   "load the ns and then get into it"

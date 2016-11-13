@@ -172,8 +172,8 @@
   (str (d/squuid)))
 
 
-(defn add-ssquuid
-  [db key-to-check key-to-add]
+(defn add-uuid
+  [db key-to-check key-to-add f]
   (for [id (d/q '[:find  ?u
                   :in $ ?c ?a
                   :where
@@ -183,8 +183,15 @@
                 db
                 key-to-check
                 key-to-add)]
-    [:db/add (first id) key-to-add (ssquuid)]))
+    [:db/add (first id) key-to-add (f)]))
+(defn add-ssquuid
+  [db key-to-check key-to-add]
+  (add-uuid db key-to-add key-to-add ssquuid))
 
+
+(defn add-squuid
+  [db key-to-check key-to-add]
+  (add-uuid db key-to-add key-to-add d/squuid))
 
 (defn convert-uuid
   "Convert a string UUID to an actual UUID"
@@ -300,12 +307,12 @@
   [db ent]
   (into {} (for [[k v] ent]
              [k (cond
-                 (set? v) (set (for [e v]
-                                 (if (= (type e) datomic.query.EntityMap)
-                                   (->> e :db/id (d/entity db) d/touch)
-                                   e)))
-                 (= datomic.query.EntityMap (type v)) (->> v :db/id (d/entity db) d/touch)
-                 :else  v)])))
+                  (set? v) (set (for [e v]
+                                  (if (= (type e) datomic.query.EntityMap)
+                                    (->> e :db/id (d/entity db) d/touch)
+                                    e)))
+                  (= datomic.query.EntityMap (type v)) (->> v :db/id (d/entity db) d/touch)
+                  :else  v)])))
 
 
 
