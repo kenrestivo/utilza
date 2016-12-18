@@ -120,8 +120,8 @@
                      "expects even number of arguments after map/vector, found odd number")))
            ret)))))
 
+
 (defn ns-key
   "Namespaces a key. This probably exists somehwere in clojure already"
   [ns k]
   (keyword (str ns "/" (name k))))
-

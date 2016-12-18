@@ -143,9 +143,9 @@
   "Takes seq and optional separator (space is default)
    and returns a string with the seq interposed with the separator"
   ([separator xs]
-     (apply str (interpose separator  xs)))
+   (apply str (interpose separator  xs)))
   ([xs]
-     (inter-str " " xs)))
+   (inter-str " " xs)))
 
 ;; TODO: Maybe replace with walk?
 (defn foobar
