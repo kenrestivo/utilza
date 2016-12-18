@@ -106,7 +106,7 @@
 
 (defn multify
   "Takes a fn that takes 3 args, a map, k, and val,
-  and returns a fn that calls fn and accepts k v, or k v k v kv
+  and returns a fn that calls f and accepts k v, or k v k v k v ...
   Lifted from clojure.core assoc"
   [f]
   (fn
