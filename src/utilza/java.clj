@@ -68,7 +68,7 @@
       format-bytes
       (as-> x
             (binding [*print-length* 100000 *print-level* 100000]
-              (with-out-str (clojure.pprint/pprint x))))
+              (with-out-str (pprint/pprint x))))
       (.replace "\"" "")))
 
 
