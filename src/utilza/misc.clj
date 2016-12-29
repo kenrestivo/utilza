@@ -233,3 +233,17 @@
           [kv (dissocs k vs)])))
 
 
+
+
+(defn flatten-map
+  "converts a nested map into a flattened map
+   via via http://stackoverflow.com/questions/17901933/flattening-a-map-by-join-the-keys"
+  ([form]
+   (into {} (flatten-map form nil)))
+  ([form pre]
+   (mapcat (fn [[k v]]
+             (let [prefix (if pre (conj pre k) [k])]
+               (if (map? v)
+                 (flatten-map v prefix)
+                 [[prefix v]])))
+           form)))

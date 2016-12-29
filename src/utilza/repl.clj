@@ -2,7 +2,7 @@
 
 (ns utilza.repl
   (:require [clojure.reflect]
-            [clojure.pprint]
+            [clojure.pprint :as pprint]
             [clojure.string])
   (:use [clojure.pprint]
         [org.timmc.handy.repl :only [show] :rename {show hjpub}]))
@@ -146,3 +146,10 @@
         names-values (partition 2 (second let-expr))
         defs   (map #(cons 'def %) names-values)]
     (concat (list 'do) defs more)))
+
+
+(defn print-table-out
+  "print-table but returns a string value"
+  [ms]
+  (binding [*print-length* 10000 *print-level* 10000]
+    (with-out-str (pprint/print-table ms))))

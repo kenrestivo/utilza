@@ -9,11 +9,22 @@
 
 
 
-(defn hashify [thing]
+(defn hashify
+  "Takes a byte-able thing (i.e. a string) and calculates its SHA-1 hash"
+  [thing]
   (let [md (java.security.MessageDigest/getInstance "SHA-1")]
     (apply str
            (map #(format "%02x" (bit-and 0x00ff %))
                 (->> thing  .getBytes  (.digest md ))))))
+
+(defn hashify-map
+  "Takes a map. Returns a hash of all the values in the map"
+  [m]
+  (hashify
+   (reduce (fn [acc k]
+             (str acc (m k)))
+           ""
+           (-> m keys sort))))
 
 
 (defn iso8601-to-rfc822-date
@@ -67,8 +78,8 @@
   (-> byte-array
       format-bytes
       (as-> x
-            (binding [*print-length* 100000 *print-level* 100000]
-              (with-out-str (pprint/pprint x))))
+          (binding [*print-length* 100000 *print-level* 100000]
+            (with-out-str (clojure.pprint/pprint x))))
       (.replace "\"" "")))
 
 
@@ -149,3 +160,9 @@
   [group-id artifact-id]
   (let [{:keys [version revision]} (get-project-properties group-id artifact-id)]
     (format "Version: %s, Revision %s" version revision)))
+
+(defn write-file
+  "like spit but for bytes"
+  [fname bytes]
+  (with-open [w (java.io.BufferedOutputStream. (java.io.FileOutputStream. fname))]
+    (.write w bytes)))
