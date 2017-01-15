@@ -125,3 +125,12 @@
   "Namespaces a key. This probably exists somehwere in clojure already"
   [ns k]
   (keyword (str ns "/" (name k))))
+
+
+(defn wrap
+  "Utility for inserting state into a ring map. 
+   Pass it a handler, a key, and a thing to assoc in at that key.
+   Returns a function that takes a req and runs the handler with the thing assoc'ed in at that key."
+  [handler k thing]
+  (fn [req]
+    (handler (assoc req k thing))))
