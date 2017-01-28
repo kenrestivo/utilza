@@ -1,5 +1,5 @@
 (ns utilza.spec
-  [clojure.spec :as s])
+  (:require [clojure.spec :as s]))
 
 (defn validate
   "Validates settings based on setting-spec supplied"
