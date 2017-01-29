@@ -5,7 +5,7 @@
 
 
 (defn validate-data
-  "Validates settings based on setting-spec supplied"
+  "Validates settings based on setting-spec supplied. Throws ex-info if fails."
   [settings-spec settings]
   (if (s/valid? settings-spec settings)
     (s/conform settings-spec settings)
@@ -13,7 +13,7 @@
 
 
 (defn validate
-  "Validates settings based on setting-spec supplied"
+  "Validates settings based on setting-spec supplied. Prints any errors to stdout"
   [settings-spec settings]
   (if (s/valid? settings-spec settings)
     (s/conform settings-spec settings)
