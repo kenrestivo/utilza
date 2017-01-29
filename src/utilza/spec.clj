@@ -4,6 +4,14 @@
 (s/def :utilza/pos-int (s/and integer? pos?))
 
 
+(defn validate-data
+  "Validates settings based on setting-spec supplied"
+  [settings-spec settings]
+  (if (s/valid? settings-spec settings)
+    (s/conform settings-spec settings)
+    (throw (ex-info "Invalid settings" (s/explain-data settings-spec settings)))))
+
+
 (defn validate
   "Validates settings based on setting-spec supplied"
   [settings-spec settings]
