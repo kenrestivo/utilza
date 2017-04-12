@@ -1,14 +1,15 @@
 (ns utilza.log
-  (:require [clj-stacktrace.repl :as cst]
-            [taoensso.timbre :as log]))
+  (:require 
+   [utilza.repl :as urepl]
+   [taoensso.timbre :as log]))
 
 
 
 (defmacro catcher 
   "Executes body within a try/catch, and logs the error using TImbre"
-  [body]
+  [& body]
   `(try
-     ~body
+     ~@body
      (catch Exception e#
        (log/error e#))))
 
@@ -59,3 +60,13 @@
     ~retry-wait
     (fn [] ~@body)))
 
+(defmacro spewer
+  "Executes body within a try/catch, spews the result to /tmp/foo.edn, and logs any errors to timbre"
+  [& body]
+  `(try
+     (spit "/tmp/foo.edn" "")
+     (urepl/massive-spew
+      "/tmp/foo.edn"
+      ~@body)
+     (catch Exception e#
+       (log/error e#))))

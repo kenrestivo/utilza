@@ -166,3 +166,16 @@
   [fname bytes]
   (with-open [w (java.io.BufferedOutputStream. (java.io.FileOutputStream. fname))]
     (.write w bytes)))
+
+
+(defn get-jar
+  "Prints the jar file from which clojure itself was pulled. 
+   Useful when running from uberjar"
+  []
+  (-> map ;; could be anything
+      class
+      .getProtectionDomain
+      .getCodeSource
+      .getLocation
+      .toURI
+      .getPath))

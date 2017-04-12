@@ -126,6 +126,12 @@
   [ns k]
   (keyword (str ns "/" (name k))))
 
+(defn un-ns-key
+  "Unamespaces a key. This probably exists somehwere in clojure already"
+  [k]
+  (-> k
+      name
+      keyword))
 
 (defn wrap
   "Utility for inserting state into a ring map. 

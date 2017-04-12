@@ -84,6 +84,12 @@
             (if (contains? m k) (update-in m [k] f) m))
           m km))
 
+(defn munge-all-columns
+  "Takes a coll of maps and a key map. Returns them with all the values coerced via key-map"
+  [key-map ms]
+  (for [m ms]
+    (munge-columns key-map m)))
+
 (defn capitalize-words
   "Capitalize the first letter of every word in string s
   For cases where you don't want to import
