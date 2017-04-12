@@ -11,7 +11,8 @@
   `(try
      ~@body
      (catch Exception e#
-       (log/error e#))))
+       (log/error e#)
+       :error)))
 
 
 (defn try-times-p*
@@ -69,4 +70,5 @@
       "/tmp/foo.edn"
       ~@body)
      (catch Exception e#
-       (log/error e#))))
+       (log/error e#)
+       :error)))
