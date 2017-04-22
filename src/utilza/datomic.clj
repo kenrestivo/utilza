@@ -323,6 +323,20 @@
        (clojure.edn/read-string {:readers *data-readers*})))
 
 
+
+(defn all-by-kv
+  "Returns all entity-ids for a particular key and value"
+  [db k v]
+  (->>      (d/q '[:find ?a
+                   :in $  ?id ?n
+                   :where
+                   [?a ?id ?n]
+                   ]
+                 db
+                 k
+                 v)
+            (map first)))
+
 (comment
   (defn get-unindexed-ea
     "Takes db, an alternate value, entity id, and attribute.

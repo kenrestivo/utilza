@@ -140,3 +140,8 @@
   [handler k thing]
   (fn [req]
     (handler (assoc req k thing))))
+
+(defn atom?
+  "Simply tests that x is an atom"
+  [x]
+  (instance? clojure.lang.Atom x))
