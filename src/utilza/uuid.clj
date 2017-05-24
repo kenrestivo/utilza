@@ -1,6 +1,8 @@
 (ns utilza.uuid
+  (:import java.util.UUID)
   (:require 
-   [clojure.string :as string]))
+   [clojure.string :as string]
+   [clojure.test :as t]))
 
 
 (defn uuids->short-url
@@ -23,9 +25,10 @@
   "Convert a short base36 string into a UUID."
   [short-url]
   (let [bi (BigInteger. short-url 36)]
-    (-> (java.util.UUID. (-> bi (.shiftRight 64) .longValue)
-                         (.longValue bi))
-        .toString)))
+    (-> bi
+        (.shiftRight 64)
+        .longValue
+        (java.util.UUID. (.longValue bi)))))
 
 (defn short-url->uuids
   "Convert a short base36 string into a UUID string."
@@ -34,4 +37,17 @@
       short-url->uuid
       .toString))
 
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; TESTS
+
+
+(t/deftest uuid-round-trip
+  (let [u (java.util.UUID/randomUUID)
+        s (uuid->short-url  u)
+        ru (short-url->uuid s)]
+    (t/is (= ru u))))
+        
 

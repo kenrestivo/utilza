@@ -256,3 +256,11 @@
                  (flatten-map v prefix)
                  [[prefix v]])))
            form)))
+
+(defn seqs->org-table
+  "Takes a seq of seqs, outputs a string in org mode or jira table"
+  [seqs]
+  (->> seqs
+       (map (partial inter-str "|"))
+       (inter-str "|\n|")
+       (format "|%s|")))
