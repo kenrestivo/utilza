@@ -203,17 +203,7 @@
    Walks the map, if the key is anywhere in there, redacts it.
    Used for hiding passwords in log files."
   [m ks]
-  (walk/postwalk  (fn [m]
-                    (if (map? m)
-                      (if-let [k (->> m
-                                      keys
-                                      set
-                                      (set/intersection (set ks))
-                                      first)]
-                        (assoc m k "[REDACTED]")
-                        m)
-                      m))
-                  m))
+  (reduce redact m ks))
 
 (defn changed-keys
   "Returns a set of keys in map bm that are not present in map am"
