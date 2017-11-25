@@ -1,6 +1,7 @@
 (ns utilza.misc
   (:require 
    [clojure.string :as string]
+   [clojure.java.io :as io]
    [clojure.set :as set]
    [clojure.walk :as walk]))
 
@@ -205,6 +206,7 @@
   [m ks]
   (reduce redact m ks))
 
+
 (defn changed-keys
   "Returns a set of keys in map bm that are not present in map am"
   [am bm]
@@ -254,3 +256,13 @@
        (map (partial inter-str "|"))
        (inter-str "|\n|")
        (format "|%s|")))
+<<<<<<< HEAD
+=======
+
+
+(defn read-lines
+  "Greedily reads a file into a seq of lines"
+  [fname]
+  (with-open [rdr (clojure.java.io/reader fname)]
+    (doall (line-seq rdr))))
+>>>>>>> port/work
