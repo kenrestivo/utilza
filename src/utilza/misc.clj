@@ -256,13 +256,9 @@
        (map (partial inter-str "|"))
        (inter-str "|\n|")
        (format "|%s|")))
-<<<<<<< HEAD
-=======
-
 
 (defn read-lines
   "Greedily reads a file into a seq of lines"
   [fname]
   (with-open [rdr (clojure.java.io/reader fname)]
     (doall (line-seq rdr))))
->>>>>>> port/work
