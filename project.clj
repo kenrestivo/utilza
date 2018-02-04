@@ -1,10 +1,10 @@
-(defproject utilza "0.1.95"
+(defproject utilza "0.1.96"
   :description "ken's random utilities"
   :url "https://github.com/kenrestivo/utilza"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.5.1"]
-                 [org.timmc/handy "1.7.0" :exclusions [org.clojure/clojure]]]
+  :dependencies [[org.clojure/clojure "1.9.0"]
+                 [org.timmc/handy "1.7.1" :exclusions [org.clojure/clojure]]]
   :dev-dependencies [
                      [noir "1.3.0-beta7"]
                      [clj-http "0.4.1"]
@@ -22,7 +22,7 @@
                      [c3p0/c3p0 "0.9.1.2"]
                      [honeysql "0.3.0"]
                      [neko/neko "3.0.0"]]
-  :plugins [[lein-cljsbuild "0.3.2" ]]
+  :plugins [[lein-cljsbuild "1.1.7" ]]
   :profiles {:test {:plugins [[lein-difftest "2.0.0"]]
                     :test-paths ["test" "src"]}}
   :source-paths ["src" "src-cljs"]
@@ -56,4 +56,5 @@
             "prod" ["with-profile" "user,server"
                     "do"
                     "trampoline" "repl" ":headless"]})
+
 

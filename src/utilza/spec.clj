@@ -1,5 +1,5 @@
 (ns utilza.spec
-  (:require [clojure.spec :as s]))
+  (:require [clojure.spec.alpha :as s]))
 
 (s/def :utilza/pos-int (s/and integer? pos?))
 

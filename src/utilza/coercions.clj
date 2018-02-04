@@ -1,6 +1,6 @@
 (ns utilza.coercions
   "Via https://gist.github.com/ikitommi/17602f0d08f754f89a4c6a029d8dd47e"
-  (:require [clojure.spec :as s]
+  (:require [clojure.spec.alpha :as s]
             [clojure.test :as t]))
 
 
