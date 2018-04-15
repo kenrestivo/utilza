@@ -262,3 +262,17 @@
   [fname]
   (with-open [rdr (clojure.java.io/reader fname)]
     (doall (line-seq rdr))))
+
+
+(defn val-freqs
+  "Takes a seq of maps. 
+  Returns a map with the frequencies of all values for all keys"
+  [ms]
+  (into {}
+        (for [k  (->> ms
+                      (map keys)
+                      (apply concat)
+                      set)]
+          [k (->> ms
+                  (map k)
+                  frequencies)])))
