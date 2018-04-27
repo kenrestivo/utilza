@@ -112,13 +112,13 @@
   (fn
     ([map key val] (f map key val))
     ([map key val & kvs]
-       (let [ret (f map key val)]
-         (if kvs
-           (if (next kvs)
-             (recur ret (first kvs) (second kvs) (nnext kvs))
-             (throw (IllegalArgumentException.
-                     "expects even number of arguments after map/vector, found odd number")))
-           ret)))))
+     (let [ret (f map key val)]
+       (if kvs
+         (if (next kvs)
+           (recur ret (first kvs) (second kvs) (nnext kvs))
+           (throw (IllegalArgumentException.
+                   "expects even number of arguments after map/vector, found odd number")))
+         ret)))))
 
 
 (defn ns-key
@@ -129,9 +129,9 @@
 (defn un-ns-key
   "Unamespaces a key. This probably exists somehwere in clojure already"
   [k]
-  (-> k
-      name
-      keyword))
+  (some-> k
+          name
+          keyword))
 
 (defn wrap
   "Utility for inserting state into a ring map. 
@@ -145,3 +145,10 @@
   "Simply tests that x is an atom"
   [x]
   (instance? clojure.lang.Atom x))
+
+(defn qualify-var
+  "Takes an unqualified var.
+   Returns the ns-qualified symbol.
+   Via devn on IRC"
+  [v]
+  (apply symbol ((juxt (comp name #(.name %) :ns) (comp name :name)) (meta v))))

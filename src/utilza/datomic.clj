@@ -60,6 +60,7 @@
 
 
 (defn map-and-id
+  "TODO: documentation. wtf does this thing do?"
   [m part fkey kmap]
   (let [m1 (cora/select-and-rename m kmap)]
     [(id-by-key m1 fkey part) m1]))
@@ -184,6 +185,9 @@
                 key-to-check
                 key-to-add)]
     [:db/add (first id) key-to-add (f)]))
+
+
+
 (defn add-ssquuid
   [db key-to-check key-to-add]
   (add-uuid db key-to-add key-to-add ssquuid))
@@ -218,9 +222,9 @@
 (defn all-kv
   "Gets the entity and all its attributes, from a k an v."
   [db k v]
-  (->> (one-kv db k v)
-       (d/entity db)
-       d/touch))
+  (some->> (one-kv db k v)
+           (d/entity db)
+           d/touch))
 
 
 (defn child-without-loop

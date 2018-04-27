@@ -1,6 +1,7 @@
 (ns utilza.java
   "Misc wrappers around commonly-used java functions. NS is clean for inclusion in Android too."
-  (:require [clojure.pprint :as pprint])
+  (:require [clojure.pprint :as pprint]
+            [clojure.string :as str])
   (:import (java.text SimpleDateFormat)
            java.io.File
            java.util.Date))
@@ -119,6 +120,7 @@
          (.load (clojure.java.io/reader
                  (clojure.java.io/resource 
                   (str "META-INF/maven/" group-id "/" artifact-id "/pom.properties")))))
+       (map (fn [[k v]] [k (str/trim v)]))
        (into {})
        clojure.walk/keywordize-keys))
 
@@ -179,3 +181,5 @@
       .getLocation
       .toURI
       .getPath))
+
+

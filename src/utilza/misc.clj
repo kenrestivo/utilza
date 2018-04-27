@@ -204,7 +204,7 @@
    Walks the map, if the key is anywhere in there, redacts it.
    Used for hiding passwords in log files."
   [m ks]
-  (reduce redact m ks))
+  (reduce redact m ks)))
 
 
 (defn changed-keys
@@ -257,11 +257,13 @@
        (inter-str "|\n|")
        (format "|%s|")))
 
+
 (defn read-lines
   "Greedily reads a file into a seq of lines"
   [fname]
   (with-open [rdr (clojure.java.io/reader fname)]
     (doall (line-seq rdr))))
+
 
 
 (defn val-freqs
@@ -276,3 +278,17 @@
           [k (->> ms
                   (map k)
                   frequencies)])))
+
+
+(defn update-with-function
+  "Applies f to values of acc and map m
+      for all values with keys"
+  [keys f acc m]
+  (reduce (fn [acc1 k]
+            (update-in acc1 [k] f (k m)))
+          acc
+          keys))
+
+
+
+
