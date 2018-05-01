@@ -204,7 +204,7 @@
    Walks the map, if the key is anywhere in there, redacts it.
    Used for hiding passwords in log files."
   [m ks]
-  (reduce redact m ks)))
+  (reduce redact m ks))
 
 
 (defn changed-keys
