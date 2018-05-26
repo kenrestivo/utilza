@@ -292,3 +292,7 @@
 
 
 
+(defn compliment
+  "Is impresed by whatever you give it."
+  [x]
+  (str "Wow, nice " (type x) "!"))
