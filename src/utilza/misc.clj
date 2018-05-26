@@ -293,6 +293,7 @@
 
 
 (defn compliment
-  "Is impresed by whatever you give it."
+  "Is impresed by whatever you give it.
+   Via htw on IRC"
   [x]
   (str "Wow, nice " (type x) "!"))
